@@ -5,9 +5,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")  // Numele tabelului din baza de date
+@Data
+@Table(name = "users")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -16,39 +22,4 @@ public class User {
 
     private String username;
     private String email;
-
-    // Constructor fără parametri
-    public User() {
-    }
-
-    // Constructor cu parametri (opțional)
-    public User(String username, String email) {
-        this.username = username;
-        this.email = email;
-    }
-
-    // Getteri și setteri
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

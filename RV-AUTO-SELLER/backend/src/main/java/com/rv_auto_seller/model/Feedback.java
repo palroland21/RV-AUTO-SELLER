@@ -1,7 +1,6 @@
 package com.rv_auto_seller.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity

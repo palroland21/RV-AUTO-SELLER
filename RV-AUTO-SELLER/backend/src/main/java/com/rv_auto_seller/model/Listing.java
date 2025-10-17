@@ -1,5 +1,7 @@
 package com.rv_auto_seller.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rv_auto_seller.model.enums.CarBrand;
 import com.rv_auto_seller.model.enums.CarType;
 import com.rv_auto_seller.model.enums.FuelType;
@@ -9,6 +11,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -25,7 +28,8 @@ public class Listing {
     private String title;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images;
+    @JsonManagedReference
+    private List<Image> images = new ArrayList<>();
 
     @Column(name = "PRICE", nullable = false)
     private int price;

@@ -4,6 +4,7 @@ import com.rv_auto_seller.dto.request.LoginRequest;
 import com.rv_auto_seller.dto.response.LoginResponse;
 import com.rv_auto_seller.dto.response.RegisterResponse;
 import com.rv_auto_seller.model.User;
+import com.rv_auto_seller.security.JwtUtil;
 import com.rv_auto_seller.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,12 @@ public class AuthController {
 
    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder) {
+    public AuthController(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
    @PostMapping("/register")
@@ -44,8 +47,10 @@ public class AuthController {
 
         if(user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             // TODO validation for jwtUtil
+            String token = jwtUtil.generateToken(user.getUsername(), user.getPassword());
+            System.out.println("User " + user.getUsername() + " logged succefully!");
 
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(new LoginResponse(token, user.getPassword()));
         }
         return ResponseEntity.status(401).body("Invalid credentials!");
   }

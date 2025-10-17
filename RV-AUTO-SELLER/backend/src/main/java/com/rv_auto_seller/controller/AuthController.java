@@ -36,7 +36,7 @@ public class AuthController {
               savedUser.getEmail()
       );
 
-      System.out.println("Registration succeful!");
+      System.out.println("Registration succesfull!");
 
       return ResponseEntity.ok(response);
   }

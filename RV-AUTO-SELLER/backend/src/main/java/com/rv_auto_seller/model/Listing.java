@@ -4,11 +4,15 @@ import com.rv_auto_seller.model.enums.CarBrand;
 import com.rv_auto_seller.model.enums.CarType;
 import com.rv_auto_seller.model.enums.FuelType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Listings")
 public class Listing {
@@ -59,4 +63,116 @@ public class Listing {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setBrand(CarBrand brand) {
+        this.brand = brand;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setType(CarType type) {
+        this.type = type;
+    }
+
+    public void setYearOfManufacture(int yearOfManufacture) {
+        this.yearOfManufacture = yearOfManufacture;
+    }
+
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public void setHorsePower(int horsePower) {
+        this.horsePower = horsePower;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setVIN(String VIN) {
+        this.VIN = VIN;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public CarBrand getBrand() {
+        return brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public CarType getType() {
+        return type;
+    }
+
+    public int getYearOfManufacture() {
+        return yearOfManufacture;
+    }
+
+    public FuelType getFuelType() {
+        return fuelType;
+    }
+
+    public int getHorsePower() {
+        return horsePower;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getVIN() {
+        return VIN;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }

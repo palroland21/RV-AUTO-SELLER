@@ -4,17 +4,17 @@ public class LoginResponse {
     private String userToken;
     private String password;
 
-    public LoginResponse(String username, String password) {
-        this.userToken = username;
+    public LoginResponse(String userToken, String password) {
+        this.userToken = userToken;
         this.password = password;
     }
 
-    public String getUsername() {
+    public String getUserToken() {
         return userToken;
     }
 
-    public void setUsername(String username) {
-        this.userToken = username;
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     public String getPassword() {

@@ -4,9 +4,11 @@ import com.rv_auto_seller.model.enums.CarBrand;
 import com.rv_auto_seller.model.enums.CarType;
 import com.rv_auto_seller.model.enums.FuelType;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "Listings")
 public class Listing {

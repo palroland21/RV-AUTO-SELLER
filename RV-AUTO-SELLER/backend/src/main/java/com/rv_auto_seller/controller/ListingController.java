@@ -30,6 +30,9 @@ public class ListingController {
 
         @PostMapping("/new_listing")
         public ResponseEntity<Listing> createListing(@RequestBody Listing listing){
+            if(listing.getImages() != null) {
+                listing.getImages().forEach(image -> image.setListing(listing));
+            }
             return ResponseEntity.ok(listingService.createListing(listing));
         }
 

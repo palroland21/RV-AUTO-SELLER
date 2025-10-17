@@ -5,16 +5,16 @@ public class LoginResponse {
     private String password;
 
     public LoginResponse(String username, String password) {
-        this.username = username;
+        this.userToken = username;
         this.password = password;
     }
 
     public String getUsername() {
-        return username;
+        return userToken;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userToken = username;
     }
 
     public String getPassword() {

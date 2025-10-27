@@ -28,6 +28,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment createAppointment(Appointment appointment) {
+        boolean exists = appointmentRepository.existsByClientAndDate(
+                appointment.getClient(), appointment.getDate());
+
+        if (exists) {
+            throw new IllegalArgumentException("Client already have an appointment at that time!");
+        }
         return appointmentRepository.save(appointment);
     }
 

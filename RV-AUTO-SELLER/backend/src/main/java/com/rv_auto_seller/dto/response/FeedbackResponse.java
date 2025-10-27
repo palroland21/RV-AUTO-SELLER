@@ -1,37 +1,57 @@
 package com.rv_auto_seller.dto.response;
 
-import com.rv_auto_seller.model.User;
-
 import java.time.LocalDateTime;
 
 
 public class FeedbackResponse {
-    private User fromUser;
-    private User toUser;
+    private Long id;
+    private Long fromUser;
+    private Long toUser;
+    private int rating;
+    private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public FeedbackResponse(User fromUser, User toUser, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public FeedbackResponse(Long id, Long  fromUser, Long toUser, int rating, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
         this.fromUser = fromUser;
         this.toUser = toUser;
+        this.rating = rating;
+        this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public User getFromUser() {
+    public Long getFromUser() {
         return fromUser;
     }
 
-    public void setFromUser(User fromUser) {
+    public void setFromUser(Long fromUser) {
         this.fromUser = fromUser;
     }
 
-    public User getToUser() {
+    public Long getToUser() {
         return toUser;
     }
 
-    public void setToUser(User toUser) {
+    public void setToUser(Long toUser) {
         this.toUser = toUser;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getCreatedAt() {

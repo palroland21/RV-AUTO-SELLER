@@ -1,9 +1,12 @@
 package com.rv_auto_seller.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Data
 @Table(name = "Feedback")
 public class Feedback {
 
@@ -27,4 +30,7 @@ public class Feedback {
 
     @Column(name = "CREATED_AT", nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "UPDATED_AT", nullable = false)
+    private LocalDateTime updatedAt;
 }

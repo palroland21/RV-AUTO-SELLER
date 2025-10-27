@@ -17,6 +17,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/listing/**").permitAll()
+                        .requestMatchers("/feedback/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

@@ -1,14 +1,11 @@
 package com.rv_auto_seller.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rv_auto_seller.model.enums.CarBrand;
 import com.rv_auto_seller.model.enums.CarType;
 import com.rv_auto_seller.model.enums.FuelType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;

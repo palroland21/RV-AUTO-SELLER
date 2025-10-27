@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Service
 public class ListingServiceImpl implements ListingService {
-   private final ListingRepository listingRepository;
 
+   private final ListingRepository listingRepository;
 
     public ListingServiceImpl(ListingRepository listingRepository) {
         this.listingRepository = listingRepository;

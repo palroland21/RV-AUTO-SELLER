@@ -18,7 +18,6 @@ public class Appointment {
     @Column(name = "DETAILS", nullable = true, length = 50)
     private String details;
 
-
     @ManyToOne
     @JoinColumn(name = "CLIENT_ID", nullable = false)
     private User client;

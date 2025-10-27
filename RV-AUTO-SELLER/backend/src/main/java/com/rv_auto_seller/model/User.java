@@ -1,6 +1,5 @@
 package com.rv_auto_seller.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rv_auto_seller.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

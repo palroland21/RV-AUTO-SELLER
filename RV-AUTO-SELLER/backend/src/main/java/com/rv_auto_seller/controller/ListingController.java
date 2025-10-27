@@ -1,49 +1,58 @@
 package com.rv_auto_seller.controller;
 
+import com.rv_auto_seller.dto.response.ListingResponse;
 import com.rv_auto_seller.model.Listing;
 import com.rv_auto_seller.service.ListingService;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-@RequestMapping(("/listing"))
 @RestController
+@RequestMapping("/listing")
 public class ListingController {
-        private final ListingService listingService;
 
-        public ListingController(ListingService listingService) {
-            this.listingService = listingService;
-        }
+    private final ListingService listingService;
 
-        @GetMapping("/listings")
-        public ResponseEntity<List<Listing>> getAllListings(){
-            return ResponseEntity.ok(listingService.getAllListings());
-        }
+    public ListingController(ListingService listingService) {
+        this.listingService = listingService;
+    }
 
-        @GetMapping("/{id}")
-        public ResponseEntity<Optional<Listing>> getListingById(Long listingId){
-            return ResponseEntity.ok(listingService.getListingById(listingId));
-        }
+    @GetMapping("/listings")
+    public ResponseEntity<List<ListingResponse>> getAllListings() {
+        List<ListingResponse> responses = listingService.getAllListings()
+                .stream()
+                .map(ListingResponse::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
+    }
 
-        @PostMapping("/new_listing")
-        public ResponseEntity<Listing> createListing(@RequestBody Listing listing){
-            if(listing.getImages() != null) {
-                listing.getImages().forEach(image -> image.setListing(listing));
-            }
-            return ResponseEntity.ok(listingService.createListing(listing));
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<ListingResponse> getListingById(@PathVariable("id") Long id) {
+        return listingService.getListingById(id)
+                .map(listing -> ResponseEntity.ok(new ListingResponse(listing)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-        @PutMapping("/{id}")
-        public ResponseEntity<Listing> updateListing(@PathVariable Long id, @RequestBody Listing listing){
-            return ResponseEntity.ok(listingService.updateListing(id, listing));
+    @PostMapping("/new_listing")
+    public ResponseEntity<ListingResponse> createListing(@RequestBody Listing listing) {
+        if (listing.getImages() != null) {
+            listing.getImages().forEach(image -> image.setListing(listing));
         }
+        Listing savedListing = listingService.createListing(listing);
+        return ResponseEntity.ok(new ListingResponse(savedListing));
+    }
 
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteListing(@PathVariable Long id){
-            listingService.deleteListing(id);
-            return ResponseEntity.noContent().build();
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<ListingResponse> updateListing(@PathVariable("id") Long id, @RequestBody Listing listing) {
+        Listing updated = listingService.updateListing(id, listing);
+        return ResponseEntity.ok(new ListingResponse(updated));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteListing(@PathVariable("id") Long id) {
+        listingService.deleteListing(id);
+        return ResponseEntity.noContent().build();
+    }
 }

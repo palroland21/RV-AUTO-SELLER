@@ -5,11 +5,14 @@ import com.rv_auto_seller.model.Feedback;
 import com.rv_auto_seller.service.FeedbackService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/feedback")
@@ -32,8 +35,11 @@ public class FeedbackController {
         }
 
         FeedbackResponse response = new FeedbackResponse(
-                feedback.getFromUser(),
-                feedback.getToUser(),
+                feedback.getId(),
+                feedback.getFromUser().getId(),
+                feedback.getToUser().getId(),
+                feedback.getRating(),
+                feedback.getDescription(),
                 feedback.getCreatedAt(),
                 feedback.getUpdatedAt()
         );
@@ -45,6 +51,59 @@ public class FeedbackController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO update, getAllFeedback, deleteFeedback
+    @PostMapping("/update")
+    public ResponseEntity<FeedbackResponse> updateFeedback(@RequestBody Feedback feedback) {
+
+        List<Feedback> feedBackList = feedbackService.getAllFeedback();
+        boolean exists = feedBackList.stream().anyMatch(fb -> fb.getId().equals(feedback.getId()));
+
+        if (!exists) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        feedback.setUpdatedAt(LocalDateTime.now());
+        feedbackService.updateFeedback(feedback);
+
+        FeedbackResponse response = new FeedbackResponse(
+                feedback.getId(),
+                feedback.getFromUser().getId(),
+                feedback.getToUser().getId(),
+                feedback.getRating(),
+                feedback.getDescription(),
+                feedback.getCreatedAt(),
+                feedback.getUpdatedAt()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteFeedback(@RequestBody Feedback feedback) {
+        feedbackService.deleteFeedback(feedback);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/feedbacks")
+    public ResponseEntity<List<FeedbackResponse>> getAllFeedbacks() {
+        List<Feedback> feedbacks = feedbackService.getAllFeedback();
+
+        List<FeedbackResponse> feedbackResponseList = new ArrayList<>();
+
+
+        for(Feedback feedback : feedbacks) {
+            feedbackResponseList.add(new FeedbackResponse(
+               feedback.getId(),
+               feedback.getFromUser().getId(),
+               feedback.getToUser().getId(),
+               feedback.getRating(),
+               feedback.getDescription(),
+               feedback.getCreatedAt(),
+               feedback.getUpdatedAt()
+            ));
+        }
+
+         return ResponseEntity.ok(feedbackResponseList);
+    }
 
 }

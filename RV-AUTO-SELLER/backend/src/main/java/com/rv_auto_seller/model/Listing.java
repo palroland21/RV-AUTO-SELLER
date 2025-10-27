@@ -11,6 +11,42 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*
+{
+  "title": "Volkswagen Golf 7 2.0 TDI",
+  "images": [
+    {
+      "id": 101,
+      "url": "https://example.com/images/golf1.jpg"
+    },
+    {
+      "id": 102,
+      "url": "https://example.com/images/golf2.jpg"
+    }
+  ],
+  "price": 11500,
+  "brand": "VOLKSWAGEN",
+  "model": "Golf 7",
+  "type": "SEDAN",
+  "yearOfManufacture": 2017,
+  "fuelType": "DIESEL",
+  "horsePower": 150,
+  "location": "Cluj-Napoca",
+  "vin": "WVWZZZ1KZHW123456",
+  "description": "Masina faina! Cumparati",
+  "user": {
+    "id": 5,
+    "firstName": "Andrei",
+    "lastName": "Popescu",
+    "username": "andrei.pop",
+    "email": "andrei.pop@example.com",
+    "role": "USER"
+  }
+}
+
+ */
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

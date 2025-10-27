@@ -6,6 +6,7 @@ import com.rv_auto_seller.service.FeedbackService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
@@ -40,6 +41,10 @@ public class FeedbackServiceImpl implements FeedbackService {
                 f.setUpdatedAt(LocalDateTime.now());
             }
         }
+    }
 
+    @Override
+    public List<Feedback> getAllFeedback() {
+        return feedbackRepository.findAll();
     }
 }

@@ -8,4 +8,5 @@ public interface FeedbackService {
     Feedback createFeedback(Feedback feedback);
     void deleteFeedback(Feedback feedback);
     void updateFeedback(Feedback feedback);
+    List<Feedback> getAllFeedback();
 }

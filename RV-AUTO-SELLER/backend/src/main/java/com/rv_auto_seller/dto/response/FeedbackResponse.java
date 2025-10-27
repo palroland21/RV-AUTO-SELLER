@@ -1,5 +1,7 @@
 package com.rv_auto_seller.dto.response;
 
+import com.rv_auto_seller.model.Feedback;
+
 import java.time.LocalDateTime;
 
 
@@ -12,14 +14,14 @@ public class FeedbackResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public FeedbackResponse(Long id, Long  fromUser, Long toUser, int rating, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.fromUser = fromUser;
-        this.toUser = toUser;
-        this.rating = rating;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public FeedbackResponse(Feedback feedback) {
+        this.id = feedback.getId();
+        this.fromUser = feedback.getFromUser().getId();
+        this.toUser = feedback.getToUser().getId();
+        this.rating = feedback.getRating();
+        this.description = feedback.getDescription();
+        this.createdAt = feedback.getCreatedAt();
+        this.updatedAt = feedback.getUpdatedAt();
     }
 
     public Long getFromUser() {

@@ -34,16 +34,7 @@ public class FeedbackController {
             return ResponseEntity.badRequest().build();
         }
 
-        FeedbackResponse response = new FeedbackResponse(
-                feedback.getId(),
-                feedback.getFromUser().getId(),
-                feedback.getToUser().getId(),
-                feedback.getRating(),
-                feedback.getDescription(),
-                feedback.getCreatedAt(),
-                feedback.getUpdatedAt()
-        );
-
+        FeedbackResponse response = new FeedbackResponse(feedback);
 
         feedbackService.createFeedback(feedback);
 
@@ -64,15 +55,7 @@ public class FeedbackController {
         feedback.setUpdatedAt(LocalDateTime.now());
         feedbackService.updateFeedback(feedback);
 
-        FeedbackResponse response = new FeedbackResponse(
-                feedback.getId(),
-                feedback.getFromUser().getId(),
-                feedback.getToUser().getId(),
-                feedback.getRating(),
-                feedback.getDescription(),
-                feedback.getCreatedAt(),
-                feedback.getUpdatedAt()
-        );
+        FeedbackResponse response = new FeedbackResponse(feedback);
 
         return ResponseEntity.ok(response);
     }
@@ -92,15 +75,7 @@ public class FeedbackController {
 
 
         for(Feedback feedback : feedbacks) {
-            feedbackResponseList.add(new FeedbackResponse(
-               feedback.getId(),
-               feedback.getFromUser().getId(),
-               feedback.getToUser().getId(),
-               feedback.getRating(),
-               feedback.getDescription(),
-               feedback.getCreatedAt(),
-               feedback.getUpdatedAt()
-            ));
+            feedbackResponseList.add(new FeedbackResponse(feedback));
         }
 
          return ResponseEntity.ok(feedbackResponseList);

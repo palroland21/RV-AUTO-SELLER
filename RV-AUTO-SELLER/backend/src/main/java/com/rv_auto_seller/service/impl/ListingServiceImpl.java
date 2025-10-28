@@ -57,6 +57,7 @@ public class ListingServiceImpl implements ListingService {
         }
         return listingRepository.save(existing);
     }
+
     @Override
     public void deleteListing(Long id){
         listingRepository.deleteById(id);

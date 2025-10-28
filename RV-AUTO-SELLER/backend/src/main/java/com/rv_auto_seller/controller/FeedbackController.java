@@ -1,14 +1,12 @@
 package com.rv_auto_seller.controller;
 
+import com.rv_auto_seller.dto.response.AppointmentResponse;
 import com.rv_auto_seller.dto.response.FeedbackResponse;
 import com.rv_auto_seller.model.Feedback;
 import com.rv_auto_seller.service.FeedbackService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,30 +40,20 @@ public class FeedbackController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<FeedbackResponse> updateFeedback(@RequestBody Feedback feedback) {
-
-        List<Feedback> feedBackList = feedbackService.getAllFeedback();
-        boolean exists = feedBackList.stream().anyMatch(fb -> fb.getId().equals(feedback.getId()));
-
-        if (!exists) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        feedback.setUpdatedAt(LocalDateTime.now());
-        feedbackService.updateFeedback(feedback);
-
-        FeedbackResponse response = new FeedbackResponse(feedback);
-
-        return ResponseEntity.ok(response);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<FeedbackResponse> updateFeedback(@PathVariable Long id, @RequestBody Feedback feedback) {
+        return feedbackService.findById(id)
+                .map(existing -> {
+                    existing.setRating(feedback.getRating());
+                    existing.setDescription(feedback.getDescription());
+                    existing.setUpdatedAt(LocalDateTime.now());
+                    existing.setFromUser(feedback.getFromUser());
+                    existing.setToUser(feedback.getToUser());
+                    feedbackService.updateFeedback(existing);
+                    return ResponseEntity.ok(new FeedbackResponse(existing));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-    @PostMapping("/delete")
-    public ResponseEntity<?> deleteFeedback(@RequestBody Feedback feedback) {
-        feedbackService.deleteFeedback(feedback);
-        return ResponseEntity.ok().build();
-    }
-
 
     @GetMapping("/feedbacks")
     public ResponseEntity<List<FeedbackResponse>> getAllFeedbacks() {
@@ -79,6 +67,16 @@ public class FeedbackController {
         }
 
          return ResponseEntity.ok(feedbackResponseList);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        return feedbackService.findById(id)
+                .map(feedback -> {
+                    feedbackService.deleteFeedback(feedback);
+                    return ResponseEntity.ok(new FeedbackResponse(feedback));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.rv_auto_seller.service.impl;
 
+import com.rv_auto_seller.model.Image;
 import com.rv_auto_seller.model.Listing;
 import com.rv_auto_seller.repository.ListingRepository;
 import com.rv_auto_seller.service.ListingService;
@@ -46,8 +47,14 @@ public class ListingServiceImpl implements ListingService {
         existing.setLocation(updatedListing.getLocation());
         existing.setVIN(updatedListing.getVIN());
         existing.setDescription(updatedListing.getDescription());
-        existing.setImages(updatedListing.getImages());
-
+        //existing.setImages(updatedListing.getImages());
+        existing.getImages().clear();
+        if(updatedListing.getImages() != null){
+            for(Image img : updatedListing.getImages()){
+                img.setListing(existing);
+                existing.getImages().add(img);
+            }
+        }
         return listingRepository.save(existing);
     }
     @Override

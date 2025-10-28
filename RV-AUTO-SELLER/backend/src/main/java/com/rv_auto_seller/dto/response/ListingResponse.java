@@ -25,7 +25,7 @@ public class ListingResponse {
     private String location;
     private String VIN;
     private String description;
-    private User user;
+    private Long user;
 
     public ListingResponse(Listing listing) {
         this.id = listing.getId();
@@ -41,7 +41,7 @@ public class ListingResponse {
         this.location = listing.getLocation();
         this.VIN = listing.getVIN();
         this.description = listing.getDescription();
-        this.user = listing.getUser();
+        this.user = listing.getUser().getId();
     }
 
     // Getteri
@@ -97,7 +97,7 @@ public class ListingResponse {
         return description;
     }
 
-    public User getUser() {
+    public Long getUser() {
         return user;
     }
 }

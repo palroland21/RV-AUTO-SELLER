@@ -5,8 +5,8 @@ import com.rv_auto_seller.repository.FeedbackRepository;
 import com.rv_auto_seller.service.FeedbackService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
@@ -29,22 +29,16 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public void updateFeedback(Feedback feedback) {
-
-        for(Feedback f : feedbackRepository.findAll()) {
-            if(f.getId().equals(feedback.getId())) {
-                f.setFromUser(feedback.getFromUser());
-                f.setToUser(feedback.getToUser());
-                f.setRating(feedback.getRating());
-                f.setDescription(feedback.getDescription());
-
-                // Set update data
-                f.setUpdatedAt(LocalDateTime.now());
-            }
-        }
+        feedbackRepository.save(feedback);
     }
 
     @Override
     public List<Feedback> getAllFeedback() {
         return feedbackRepository.findAll();
+    }
+
+    @Override
+    public Optional<Feedback> findById(Long id) {
+        return feedbackRepository.findById(id);
     }
 }

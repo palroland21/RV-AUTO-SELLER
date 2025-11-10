@@ -34,6 +34,10 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+    --brand-primary: #1a4a9c;
+    --brand-primary-dark: #0b2d6a;
+    --brand-accent-orange: #ff6600;
+    --brand-text-light: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {

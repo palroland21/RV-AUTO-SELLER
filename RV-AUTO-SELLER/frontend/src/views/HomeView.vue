@@ -1,8 +1,8 @@
-
 <template>
   <Navbar />
 
   <div class="home-view">
+
     <section class="hero-section">
       <div class="hero-overlay"></div>
       <div class="hero-content">
@@ -26,41 +26,68 @@
 
     <section class="features-section">
       <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
         <h3>Dealeri verificați</h3>
         <p>Toți vânzătorii sunt verificați și evaluați de comunitatea noastră</p>
       </div>
+
       <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
         <h3>Filtrare avansată</h3>
         <p>Găsește mașina perfectă folosind filtrele noastre detaliate</p>
       </div>
+
       <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
         <h3>Contact direct</h3>
         <p>Comunică direct cu vânzătorii prin platformă</p>
       </div>
+
       <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
         <h3>Recenzii reale</h3>
         <p>Citește experiențele altor cumpărători înainte de a decide</p>
       </div>
     </section>
 
     <section class="recommended-section">
-      <h2>Oferte recomandate</h2>
-      <p>Descoperă cele mai bune oferte verificate de echipa noastră</p>
+      <div class="section-header">
+        <h2>Oferte recomandate</h2>
+        <p>Descoperă cele mai bune oferte verificate de echipa noastră</p>
+      </div>
 
       <div class="listings-grid">
-        <div class="car-card-placeholder">Card Mașină 1 (SUV Modern)</div>
-        <div class="car-card-placeholder">Card Mașină 2 (Sedan Luxury)</div>
-        <div class="car-card-placeholder">Card Mașină 3 (Minivan Familial)</div>
-        <div class="car-card-placeholder">Card Mașină 4 (Hatchback)</div>
+        <CarCard
+            v-for="n in 4"
+            :key="n"
+            title=""
+            :price="15000"
+            :year="2023"
+            :km="10000"
+            fuel="Benzină"
+            location="București"
+            image=""
+            :isRecommended="true"
+        />
       </div>
     </section>
+
     <Footer />
   </div>
 </template>
 
-<script setup lang="ts">
-  import Navbar from "@/components/common/Navbar.vue";
-  import Footer from "@/components/common/Footer.vue";
+<script setup>
+import Navbar from "@/components/common/Navbar.vue";
+import Footer from "@/components/common/Footer.vue";
+import CarCard from "@/components/common/CarCard.vue";
 </script>
 
 <style scoped>
@@ -83,7 +110,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(11, 45, 106, 0.85);
+  background-color: rgba(11, 45, 106, 0.7);
   z-index: 1;
 }
 
@@ -98,19 +125,20 @@
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  color: white;
 }
 
 .hero-content p {
   font-size: 1.1rem;
   margin-bottom: 2rem;
-  color: var(--vt-c-text-dark-2);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .search-container {
   display: flex;
   background-color: var(--vt-c-white);
   border-radius: 50px;
-  padding: 0.5rem;
+  padding: 0.4rem;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -129,51 +157,70 @@
   background-color: var(--brand-primary);
   color: var(--brand-text-light);
   border: none;
-  padding: 0.7rem 1.5rem;
+  padding: 0.7rem 2rem;
   border-radius: 50px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .popular-searches {
   margin-top: 1rem;
   font-size: 0.9rem;
 }
-
-.popular-searches span {
-  margin-right: 0.5rem;
-  color: var(--vt-c-text-dark-2);
-}
-
+.popular-searches span { color: rgba(255,255,255,0.8); margin-right: 0.5rem; }
 .popular-searches a {
-  color: var(--brand-text-light);
+  color: white;
   text-decoration: none;
   font-weight: bold;
   margin: 0 0.25rem;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid var(--brand-text-light);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgba(255,255,255,0.4);
   border-radius: 20px;
-  transition: background-color 0.3s;
-}
-
-.popular-searches a:hover {
-  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .features-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 4rem auto;
   padding: 0 2rem;
+}
+
+
+.feature-card {
+  background-color: var(--vt-c-white);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: var(--brand-primary);
+}
+
+.feature-icon {
+  color: var(--brand-primary);
+  background-color: var(--color-background-soft);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
 }
 
 .feature-card h3 {
   font-size: 1.25rem;
   font-weight: bold;
-  color: var(--brand-primary-dark);
+  color: var(--vt-c-black);
   margin-bottom: 0.5rem;
 }
 
@@ -184,40 +231,31 @@
 }
 
 .recommended-section {
-  max-width: 1200px;
-  margin: 4rem auto;
+  max-width: 1280px;
+  margin: 4rem auto 6rem;
   padding: 0 2rem;
-  text-align: center;
 }
 
-.recommended-section h2 {
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.section-header h2 {
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 800;
   color: var(--brand-primary-dark);
   margin-bottom: 0.5rem;
 }
 
-.recommended-section p {
+.section-header p {
   font-size: 1.1rem;
   color: var(--vt-c-text-light-2);
-  margin-bottom: 2rem;
 }
 
 .listings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.car-card-placeholder {
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 1rem;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-background-soft);
+  gap: 2rem;
 }
 </style>
-

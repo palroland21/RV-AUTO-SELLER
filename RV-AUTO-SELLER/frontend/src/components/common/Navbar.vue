@@ -15,17 +15,16 @@
       </div>
 
       <div class="nav-links">
-        <a href="/">Acasă</a>
-        <a href="/listings">Anunțuri</a>
-        <a href="/sell">Vinde</a>
+        <a href="/">Home</a>
+        <a href="/listings">Vehicles</a>
       </div>
 
       <div class="user-actions">
         <a href="/account" class="btn-account">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Contul meu
+          Account
         </a>
-        <button class="btn-add-listing">Adaugă anunț</button>
+        <button class="btn-add-listing">Sell your car</button>
       </div>
     </div>
   </nav>
@@ -94,7 +93,7 @@ onUnmounted(() => {
   text-decoration: none;
   color: var(--color-text);
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 1.2rem;
   transition: color 0.2s ease;
 }
 .nav-links a:hover { color: var(--brand-primary); }

@@ -7,29 +7,29 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
           <h3 class="footer-logo-text">RV Auto Seller</h3>
         </div>
-        <p class="footer-description">Platforma ta de încredere pentru cumpărarea și vânzarea de automobile.</p>
+        <p class="footer-description">Your trusted platform for buying and selling automobiles.</p>
       </div>
 
       <div class="footer-column links">
-        <h4>Navigare</h4>
+        <h4>Menu</h4>
         <ul>
-          <li><a href="/">Acasă</a></li>
-          <li><a href="/listings">Anunțuri</a></li>
-          <li><a href="/sell">Vinde</a></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/listings">Vehicles</a></li>
+          <li><a href="/sell">Sell</a></li>
         </ul>
       </div>
 
       <div class="footer-column links">
-        <h4>Suport</h4>
+        <h4>Support</h4>
         <ul>
           <li><a href="/contact">Contact</a></li>
-          <li><a href="/faq">Întrebări frecvente</a></li>
-          <li><a href="/politics">Politică de confidențialitate</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/politics">Privacy policy</a></li>
         </ul>
       </div>
 
       <div class="footer-column social">
-        <h4>Urmărește-ne</h4>
+        <h4>Follow Us!</h4>
         <div class="social-icons">
           <a href="#" aria-label="Facebook">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
@@ -46,7 +46,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; {{ new Date().getFullYear() }} RV Auto Seller. Toate drepturile rezervate.</p>
+      <p>&copy; {{ new Date().getFullYear() }} RV Auto Seller. All rights reserved.</p>
     </div>
   </footer>
 </template>
@@ -83,14 +83,14 @@
 }
 
 .footer-logo-text {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--brand-primary-dark);
   margin: 0;
 }
 
 .footer-description {
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   line-height: 1.6;
   color: var(--vt-c-text-light-2);
   max-width: 300px;
@@ -166,6 +166,7 @@
 
   .footer-description {
     margin: 0 auto;
+    font-weight: bold;
   }
 
   .social-icons {

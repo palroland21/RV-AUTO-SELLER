@@ -63,9 +63,8 @@ onUnmounted(() => {
   transition: all 0.3s ease;
   z-index: 1000;
 
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
 
   background-color: var(--color-background);
   border-bottom: 1px solid var(--color-border);

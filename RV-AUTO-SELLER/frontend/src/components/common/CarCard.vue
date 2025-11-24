@@ -1,7 +1,7 @@
 <template>
   <div class="car-card">
     <div class="card-image-wrapper">
-      <div v-if="isRecommended" class="badge-recommended">Recomandat</div>
+      <div v-if="isRecommended" class="badge-recommended">Recommended</div>
       <img :src="image" :alt="title" class="car-image" />
     </div>
 
@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <button class="btn-details">Vezi detalii</button>
+      <button class="btn-details">See details</button>
     </div>
   </div>
 </template>

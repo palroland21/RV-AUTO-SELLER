@@ -6,16 +6,16 @@
     <section class="hero-section">
       <div class="hero-overlay"></div>
       <div class="hero-content">
-        <h1>Găsește mașina perfectă</h1>
-        <p>Descoperă mii de oferte de mașini noi și second-hand de la dealeri verificați</p>
+        <h1>Explore and find your ideal car</h1>
+        <p>Discover thousands of new and used car offers from verified and trusted dealers.</p>
 
         <div class="search-container">
-          <input type="text" placeholder="Caută după marcă, model sau cuvinte cheie..." />
-          <button class="search-button">Caută</button>
+          <input type="text" placeholder="Search by brand, model, or keywords..." />
+          <button class="search-button">Search</button>
         </div>
 
         <div class="popular-searches">
-          <span>Căutări populare:</span>
+          <span>Popular searches:</span>
           <a href="#">BMW</a>
           <a href="#">Mercedes</a>
           <a href="#">Audi</a>
@@ -29,39 +29,39 @@
         <div class="feature-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         </div>
-        <h3>Dealeri verificați</h3>
-        <p>Toți vânzătorii sunt verificați și evaluați de comunitatea noastră</p>
+        <h3>Verified Dealers</h3>
+        <p>All sellers are verified and evaluated by our community</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </div>
-        <h3>Filtrare avansată</h3>
-        <p>Găsește mașina perfectă folosind filtrele noastre detaliate</p>
+        <h3>Advanced filtering</h3>
+        <p>Find the perfect car using our detailed filters</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
         </div>
-        <h3>Contact direct</h3>
-        <p>Comunică direct cu vânzătorii prin platformă</p>
+        <h3>Direct contact</h3>
+        <p>Communicate directly with sellers through the platform</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
         </div>
-        <h3>Recenzii reale</h3>
-        <p>Citește experiențele altor cumpărători înainte de a decide</p>
+        <h3>Real feedback</h3>
+        <p>Read other buyers experiences before deciding</p>
       </div>
     </section>
 
     <section class="recommended-section">
       <div class="section-header">
-        <h2>Oferte recomandate</h2>
-        <p>Descoperă cele mai bune oferte verificate de echipa noastră</p>
+        <h2>Recommended offers</h2>
+        <p>Discover the best deals verified by our team</p>
       </div>
 
       <div class="listings-grid">
@@ -72,8 +72,8 @@
             :price="15000"
             :year="2023"
             :km="10000"
-            fuel="Benzină"
-            location="București"
+            fuel="Petrol"
+            location="Bucharest"
             image=""
             :isRecommended="true"
         />

@@ -3,27 +3,28 @@
       class="navbar"
       :class="{
       'navbar-transparent': isTransparent && !isScrolled,
-      'scrolled': isScrolled
+          'scrolled': isScrolled
     }"
   >
     <div class="navbar-container">
       <div class="logo">
-        <a href="/">
+        <router-link to="/">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
           RV Auto Seller
-        </a>
+        </router-link>
       </div>
 
       <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/listings">Vehicles</a>
+        <router-link to="/">Home</router-link>
+        <router-link to="/listings">Vehicles</router-link>
       </div>
 
       <div class="user-actions">
-        <a href="/account" class="btn-account">
+        <router-link to="/account" class="btn-account">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           Account
-        </a>
+        </router-link>
+
         <button class="btn-add-listing">Sell your car</button>
       </div>
     </div>
@@ -53,6 +54,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
+
 </script>
 
 <style scoped>

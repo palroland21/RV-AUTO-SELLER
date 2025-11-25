@@ -8,8 +8,8 @@
       <p>Please login or register to access your account.</p>
 
       <div class="buttons">
-        <button class="btn primary">Login</button>
-        <button class="btn secondary">Register</button>
+        <router-link to="/login" class="btn primary">Login</router-link>
+        <router-link to="/register" class="btn secondary">Register</router-link>
       </div>
     </div>
 
@@ -74,6 +74,8 @@
         <p>Favorite</p>
       </div>
 
+      <button class="btn primary" @click="logout">Logout</button>
+
     </div>
 
   </main>
@@ -86,6 +88,7 @@ import Navbar from "@/components/common/Navbar.vue";
 import Footer from "@/components/common/Footer.vue";
 import { getCurrentUser } from "@/api/userService";
 import type { User } from "@/types/User";
+import router from "@/router";
 
 export default defineComponent({
   name: "AccountPage",
@@ -99,6 +102,13 @@ export default defineComponent({
     const user = ref<User | null>(null);
     const isLoggedIn = ref<boolean>(false);
     const tab = ref<"profile" | "ads" | "favorites">("profile");
+    const logout = () => {
+      localStorage.removeItem("token");
+      isLoggedIn.value = false;
+      user.value = null;
+      router.push("/");
+    };
+
 
     onMounted(async () => {
       try {
@@ -115,119 +125,122 @@ export default defineComponent({
       isLoggedIn,
       user,
       tab,
+      logout
     };
   },
 });
 </script>
 
 <style>
+
 .account-container {
-display: flex;
-justify-content: center;
-padding-top: 120px; /* pentru a evita navbar-ul fix */
-padding-bottom: 80px;
+  display: flex;
+  justify-content: center;
+  padding-top: 120px; /* pentru a evita navbar-ul fix */
+  padding-bottom: 80px;
 }
 
 /* Card general */
 .card {
-width: 750px;
-background: rgba(232, 243, 250, 1);
-padding: 2rem;
-border-radius: 12px;
-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  width: 750px;
+  background: rgba(232, 243, 250, 1);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .not-logged-card {
-text-align: center;
+  text-align: center;
 }
 
 /* Butoane login/register */
 .buttons {
-display: flex;
-justify-content: center;
-gap: 1rem;
-margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .btn {
-padding: 10px 20px;
-border-radius: 8px;
-cursor: pointer;
-font-weight: 600;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .btn.primary {
-background: #1f6fff;
-color: white;
-border: none;
+  background: #1f6fff;
+  color: white;
+  border: none;
 }
 
 .btn.secondary {
-background: white;
-color: #1f6fff;
-border: 2px solid #1f6fff;
+  background: white;
+  color: #1f6fff;
+  border: 2px solid #1f6fff;
 }
 
 /* Card user logat */
 .profile-card h2 {
-margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 /* Tabs (Profil / Anunțuri / Favorite) */
 .tabs {
-margin-top: 20px;
-display: flex;
-gap: 1rem;
-background: #f4f6fb;
-padding: 8px;
-border-radius: 10px;
+  margin-top: 20px;
+  display: flex;
+  gap: 1rem;
+  background: #f4f6fb;
+  padding: 8px;
+  border-radius: 10px;
 }
 
 .tabs button {
-padding: 8px 16px;
-border-radius: 8px;
-background: transparent;
-border: none;
-cursor: pointer;
-font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .tabs .active {
-background: white;
-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Formular profil */
 .form-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 1rem;
-margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .form-grid .full {
-grid-column: 1 / -1;
+  grid-column: 1 / -1;
 }
 
 label {
-font-size: 0.9rem;
-color: #444;
+  font-size: 0.9rem;
+  color: #444;
 }
 
 input {
-width: 100%;
-padding: 10px;
-border-radius: 6px;
-border: 1px solid #dce0ea;
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #dce0ea;
 }
 
 /* Buton salvare */
 .btn.save {
-margin-top: 1.5rem;
-background: #1f6fff;
-color: white;
-border: none;
-padding: 12px 24px;
-border-radius: 8px;
+  margin-top: 1.5rem;
+  background: #1f6fff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
 }
 </style>

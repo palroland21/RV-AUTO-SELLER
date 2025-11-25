@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Account from '@/views/Auth/Account.vue'
 import HomeView from "@/views/HomeView.vue";
+import LoginView from "@/views/Auth/LoginView.vue";
+import RegisterView from "@/views/Auth/RegisterView.vue";
+import ListingForm from "@/components/listings/ListingForm.vue";
 
 const routes = [
     {
@@ -13,6 +16,21 @@ const routes = [
         name: 'Account',
         component: Account
     },
+    {
+        path: '/login',
+        name: 'Login',
+        component: LoginView
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: RegisterView
+    },
+    {
+        path:'/sell-form',
+        name: 'SellForm',
+        component: ListingForm
+    }
 
 ]
 

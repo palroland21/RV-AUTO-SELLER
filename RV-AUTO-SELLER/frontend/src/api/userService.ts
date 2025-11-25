@@ -1,7 +1,15 @@
-import http from "./https";
-import type { User } from "@/types/User";
+import axios from "axios";
 
-export const getCurrentUser = async (): Promise<User> => {
-    const response = await http.get<User>("/user/me");
+export async function getCurrentUser() {
+    const token = localStorage.getItem("token");
+
+    if (!token) throw new Error("No token received");
+
+    const response = await axios.get("http://localhost:9090/auth/me", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
     return response.data;
-};
+}

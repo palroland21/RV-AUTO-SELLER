@@ -25,7 +25,7 @@
           Account
         </router-link>
 
-        <button class="btn-add-listing">Sell your car</button>
+        <router-link to="/sell-form" class="btn-add-listing">Sell your car</router-link>
       </div>
     </div>
   </nav>
@@ -117,6 +117,7 @@ onUnmounted(() => {
   background: var(--brand-accent-orange);
 }
 .btn-add-listing {
+  text-decoration: none;
   background-color: var(--brand-primary-dark);
   color: var(--vt-c-white);
   border: none;
@@ -127,7 +128,10 @@ onUnmounted(() => {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-.btn-add-listing:hover { background-color: var(--brand-primary); }
+.btn-add-listing:hover {
+  text-decoration: none;
+  background-color: var(--brand-primary);
+}
 
 .navbar.navbar-transparent {
   background-color: transparent;

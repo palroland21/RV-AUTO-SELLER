@@ -46,6 +46,7 @@ public class ListingServiceImpl implements ListingService {
         existing.setHorsePower(updatedListing.getHorsePower());
         existing.setLocation(updatedListing.getLocation());
         existing.setVIN(updatedListing.getVIN());
+        existing.setTransmissionType(updatedListing.getTransmissionType());
         existing.setDescription(updatedListing.getDescription());
         //existing.setImages(updatedListing.getImages());
         existing.getImages().clear();

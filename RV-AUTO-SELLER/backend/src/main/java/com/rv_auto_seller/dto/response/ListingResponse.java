@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.rv_auto_seller.model.Listing;
 import com.rv_auto_seller.model.Image;
+import com.rv_auto_seller.model.enums.TransmissionType;
 
 public class ListingResponse {
 
@@ -24,6 +25,7 @@ public class ListingResponse {
     private int horsePower;
     private String location;
     private String VIN;
+    private TransmissionType transmissionType;
     private String description;
     private Long user;
 
@@ -99,5 +101,9 @@ public class ListingResponse {
 
     public Long getUser() {
         return user;
+    }
+
+    public TransmissionType getTransmissionType() {
+        return transmissionType;
     }
 }

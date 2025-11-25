@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rv_auto_seller.model.enums.CarBrand;
 import com.rv_auto_seller.model.enums.CarType;
 import com.rv_auto_seller.model.enums.FuelType;
+import com.rv_auto_seller.model.enums.TransmissionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -93,6 +94,10 @@ public class Listing {
 
     @Column(name = "VIN", nullable = true, unique = true, length = 17)
     private String VIN;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TRANSMISSION_TYPE", nullable = true)
+    private TransmissionType transmissionType;
 
     @Column(name = "DESCRIPTION",  nullable = false, length = 1000)
     private String description;
@@ -211,5 +216,13 @@ public class Listing {
 
     public User getUser() {
         return user;
+    }
+
+    public TransmissionType getTransmissionType() {
+        return transmissionType;
+    }
+
+    public void setTransmissionType(TransmissionType transmissionType) {
+        this.transmissionType = transmissionType;
     }
 }

@@ -56,7 +56,7 @@ public class AuthController {
             String token = jwtUtil.generateToken(user.getUsername(), user.getPassword());
             System.out.println("User " + user.getUsername() + " logged succefully!");
 
-            return ResponseEntity.ok(new LoginResponse(token, user.getPassword()));
+            return ResponseEntity.ok(new LoginResponse(token));
         }
         return ResponseEntity.status(401).body("Invalid credentials!");
   }
@@ -84,5 +84,43 @@ public class AuthController {
 
       return ResponseEntity.ok(userResponseList);
   }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Missing or invalid token");
+        }
+
+        // extragem tokenul (fara "Bearer ")
+        String token = authHeader.substring(7);
+
+        // extragem username din token
+        String username = jwtUtil.extractUsername(token);
+
+        if (username == null) {
+            return ResponseEntity.status(401).body("Invalid token");
+        }
+
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(404).body("User not found");
+        }
+
+        UserResponse response = new UserResponse(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole(),
+                user.getListings().stream().map(Listing::getId).toList()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }

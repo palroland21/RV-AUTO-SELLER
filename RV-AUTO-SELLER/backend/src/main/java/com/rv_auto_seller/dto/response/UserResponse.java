@@ -9,17 +9,18 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String username;
+    private String telephone;
     private String email;
     private String password;
     private Role role;
     private List<Long> listingIds;
 
-
-    public UserResponse(Long id, String firstName, String lastName, String username, String email, String password, Role role, List<Long> listingIds) {
+    public UserResponse(Long id, String firstName, String lastName, String username, String telephone, String email, String password, Role role, List<Long> listingIds) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
+        this.telephone = telephone;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -56,6 +57,14 @@ public class UserResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getEmail() {

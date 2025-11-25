@@ -20,7 +20,7 @@ public class JwtUtil {
 
     public String generateToken(String username, String password) {
         return Jwts.builder()
-                .setSubject(password)
+                .setSubject(username)
                 .claim("username", username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
@@ -38,11 +38,11 @@ public class JwtUtil {
     }
 
     public String extractUsername(String token) {
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(SECRET_KEY.getBytes())
                 .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
+                .getBody()
+                .getSubject(); // username
     }
 
     public String extractRole(String token) {

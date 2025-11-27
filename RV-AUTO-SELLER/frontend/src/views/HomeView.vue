@@ -99,7 +99,7 @@ import CarCard from "@/components/common/CarCard.vue";
   justify-content: center;
   text-align: center;
   color: var(--brand-text-light);
-  background-image: url('/images/hero-car.jpg');
+  background-image: url('/porsche.jpg');
   background-size: cover;
   background-position: center;
 }

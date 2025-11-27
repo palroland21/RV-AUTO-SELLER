@@ -90,7 +90,7 @@ import Footer from "@/components/common/Footer.vue";
 import CarCard from "@/components/common/CarCard.vue";
 </script>
 
-<style scoped>
+<style>
 .hero-section {
   position: relative;
   height: 70vh;

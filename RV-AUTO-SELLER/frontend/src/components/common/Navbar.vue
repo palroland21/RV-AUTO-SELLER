@@ -25,6 +25,11 @@
           Account
         </router-link>
 
+        <button v-if="isLoggedIn" @click="handleLogout" class="btn-logout" title="Logout">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Logout
+        </button>
+
         <router-link to="/sell-form" class="btn-add-listing">Sell your car</router-link>
       </div>
     </div>
@@ -32,7 +37,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import {ref, onMounted, onUnmounted, watch} from 'vue';
+import {useRoute, useRouter} from "vue-router";
 
 defineProps({
   isTransparent: {
@@ -42,19 +48,34 @@ defineProps({
 });
 
 const isScrolled = ref(false);
+const isLoggedIn = ref(false);
+
+const router = useRouter();
+const route = useRoute();
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50;
 };
 
+const checkLoginStatus = () => {
+  const token = localStorage.getItem("token");
+  isLoggedIn.value = !!token;   // Devine 'true' daca token exista si 'false' daca e NULL
+}
+
+const handleLogout = () => {
+    localStorage.removeItem("token");
+    isLoggedIn.value = false;
+    router.push("/");
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
+  checkLoginStatus(); // Apeleaza functia la fiecare incarcare a paginii
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
-
 </script>
 
 <style scoped>
@@ -116,6 +137,25 @@ onUnmounted(() => {
   color: var(--brand-text-light);
   background: var(--brand-accent-orange);
 }
+
+.btn-logout {
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.btn-logout:hover {
+  border-color: var(--brand-text-light);
+  color: var(--brand-text-light);
+  background: var(--brand-accent-orange);
+}
+
 .btn-add-listing {
   text-decoration: none;
   background-color: var(--brand-primary-dark);

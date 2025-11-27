@@ -24,45 +24,45 @@
         <button :class="{ active: tab==='ads' }" @click="tab='ads'">Anunțurile mele</button>
         <button :class="{ active: tab==='favorites' }" @click="tab='favorites'">Favorite</button>
       </div>
-    </div>
 
-    <!-- TAB CONTENT -->
-    <div class="tab-content" v-if="isLoggedIn">
+      <!-- TAB CONTENT -->
+      <div class="tab-content" v-if="isLoggedIn">
 
-      <!-- PROFILE TAB -->
-      <div v-if="tab === 'profile'">
-        <h3>Personal Information</h3>
+        <!-- PROFILE TAB -->
+        <div v-if="tab === 'profile'">
+          <h3>Personal Information</h3>
 
-        <div class="form-grid">
-          <div>
-            <label>First name</label>
-            <input type="text" v-model="user!.firstName" />
+          <div class="form-grid">
+            <div>
+              <label>First name</label>
+              <input type="text" v-model="user!.firstName" />
+            </div>
+
+            <div>
+              <label>Last name</label>
+              <input type="text" v-model="user!.lastName" />
+            </div>
+
+            <div class="full">
+              <label>Email</label>
+              <input type="email" v-model="user!.email" disabled />
+            </div>
+
+            <div class="full">
+              <label>Telephone</label>
+              <input type="text" v-model="user!.telephone" />
+            </div>
+
+            <div class="full">
+              <label>Username</label>
+              <input type="text" v-model="user!.username" disabled />
+            </div>
+
           </div>
 
-          <div>
-            <label>Last name</label>
-            <input type="text" v-model="user!.lastName" />
-          </div>
-
-          <div class="full">
-            <label>Email</label>
-            <input type="email" v-model="user!.email" disabled />
-          </div>
-
-          <div class="full">
-            <label>Telephone</label>
-            <input type="text" v-model="user!.telephone" />
-          </div>
-
-          <div class="full">
-            <label>Username</label>
-            <input type="text" v-model="user!.username" disabled />
-          </div>
-
+          <button class="btn save" @click="updateChanges" :disabled="isLoading">{{ isLoading ? 'Saving...' : 'Save' }} </button>
         </div>
-
-        <button class="btn save">Save</button>
-      </div>
+    </div>
 
       <!-- ADS -->
       <div v-if="tab === 'ads'">
@@ -74,8 +74,6 @@
         <p>Favorite</p>
       </div>
 
-      <button class="btn primary" @click="logout">Logout</button>
-
     </div>
 
   </main>
@@ -86,7 +84,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import Navbar from "@/components/common/Navbar.vue";
 import Footer from "@/components/common/Footer.vue";
-import { getCurrentUser } from "@/api/userService";
+import {getCurrentUser, updateUser} from "@/api/userService";
 import type { User } from "@/types/User";
 import router from "@/router";
 
@@ -102,12 +100,36 @@ export default defineComponent({
     const user = ref<User | null>(null);
     const isLoggedIn = ref<boolean>(false);
     const tab = ref<"profile" | "ads" | "favorites">("profile");
-    const logout = () => {
-      localStorage.removeItem("token");
-      isLoggedIn.value = false;
-      user.value = null;
-      router.push("/");
-    };
+
+    // Update
+    const isLoading = ref(false);
+    const updateMessage = ref("");
+    const updateStatus = ref(""); // Success/Error
+
+    const updateChanges = async () => {
+      if (!user.value) return;
+
+      isLoading.value = true;
+      updateMessage.value = "";
+
+      try {
+        await updateUser(user.value);
+        const refreshedUser = await getCurrentUser();
+        user.value = refreshedUser;
+
+        updateMessage.value = "Profile updated successfully!";
+        updateStatus.value = "success";
+
+        // Ascundem mesajul dupa 3 secunde
+        setTimeout(() => updateMessage.value = "", 3000);
+      } catch (error) {
+        console.error("Update failed", error);
+        updateMessage.value = "Failed to update profile. Please try again.";
+        updateStatus.value = "error";
+      } finally {
+        isLoading.value = false;
+      }
+    }
 
 
     onMounted(async () => {
@@ -125,7 +147,8 @@ export default defineComponent({
       isLoggedIn,
       user,
       tab,
-      logout
+      isLoading,
+      updateChanges
     };
   },
 });
@@ -242,5 +265,10 @@ input {
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
 }
 </style>

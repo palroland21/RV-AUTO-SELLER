@@ -20,7 +20,6 @@ public class EnumController {
     public ResponseEntity<EnumOptions> getEnums() {
         EnumOptions options = new EnumOptions();
 
-
         options.setBrands(Arrays.stream(CarBrand.values()).map(Enum::name).collect(Collectors.toList()));
         options.setCarTypes(Arrays.stream(CarType.values()).map(Enum::name).collect(Collectors.toList()));
         options.setFuelTypes(Arrays.stream(FuelType.values()).map(Enum::name).collect(Collectors.toList()));

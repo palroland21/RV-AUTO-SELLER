@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/auth")
 public class AuthController {
 
-   private final UserService userService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -42,7 +42,7 @@ public class AuthController {
               savedUser.getEmail()
       );
 
-      System.out.println("Registration succesfull!");
+      System.out.println("Registration successful!");
 
       return ResponseEntity.ok(response);
   }
@@ -64,7 +64,6 @@ public class AuthController {
   @GetMapping("/users")
     public ResponseEntity<List<UserResponse>> getUsers() {
         List<User> users = userService.findAll();
-
         List<UserResponse> userResponseList = new ArrayList<>();
 
         for(User u: users){
@@ -120,6 +119,29 @@ public class AuthController {
                 user.getRole(),
                 user.getListings().stream().map(Listing::getId).toList()
         );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?>  updateUser(@RequestBody User user) {
+        System.out.println("DEBUG - Incoming username: '" + user.getUsername() + "'");
+
+        User savedUser = userService.findByUsername(user.getUsername());
+
+        if (savedUser == null) {
+            throw new RuntimeException("User not found with username: " + user.getUsername());
+        }
+
+        RegisterResponse response = new RegisterResponse(
+                savedUser.getId(),
+                savedUser.getFirstName(),
+                savedUser.getLastName(),
+                savedUser.getUsername(),
+                savedUser.getEmail()
+        );
+
+        System.out.println("User updated successful!");
 
         return ResponseEntity.ok(response);
     }

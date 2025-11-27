@@ -51,7 +51,7 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public Listing createListingFromDTO(ListingDTO dto) throws IOException {
-        System.out.println("Am ajuns in createListingDTO!!!!");
+        //System.out.println("Am ajuns in createListingDTO!!!!");
         Listing listing = new Listing();
 
         listing.setTitle(dto.getTitle());
@@ -67,18 +67,25 @@ public class ListingServiceImpl implements ListingService {
         listing.setLocation(dto.getLocation());
         listing.setDescription(dto.getDescription());
 
-        System.out.println("Username primit din Frontend: " + dto.getUsername()); // Debug
+        //System.out.println("Username primit din Frontend: " + dto.getUsername()); // debug
 
-        if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
-            throw new RuntimeException("Username-ul lipsește din cerere!");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new RuntimeException("Security error: You are not authenticated!");
         }
 
-        User currentUser = userRepository.findByUsername(dto.getUsername())
-                .orElseThrow(() -> new RuntimeException("Userul " + dto.getUsername() + " nu există în baza de date!"));
+        String usernameDinToken = auth.getName();
+        System.out.println("User detected from Token: " + usernameDinToken);
+
+        User currentUser = userRepository.findByUsername(usernameDinToken)
+                .orElseThrow(() -> new RuntimeException("User '" + usernameDinToken + "' does not exist in database!"));
+
+        System.out.println("User found n DB with ID: " + currentUser.getId());
 
         listing.setUser(currentUser);
 
-        // procesare imagini
+        // image processing
         if (dto.getImages() != null && !dto.getImages().isEmpty()) {
             List<Image> imageEntities = new ArrayList<>();
 
@@ -122,7 +129,7 @@ public Listing updateListing(Long id, Listing updatedListing) {
     existing.setTransmissionType(updatedListing.getTransmissionType());
     existing.setDescription(updatedListing.getDescription());
 
-    // Gestionare imagini la update (logica ta existenta)
+    //handle images on update
     existing.getImages().clear();
     if (updatedListing.getImages() != null) {
         for (Image img : updatedListing.getImages()) {

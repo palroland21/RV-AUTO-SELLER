@@ -30,13 +30,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // ⚙️ Omită autentificarea pentru login/register
         if (path.startsWith("/auth/register") || path.startsWith("/auth/login")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // ⚙️ Citește headerul Authorization
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {

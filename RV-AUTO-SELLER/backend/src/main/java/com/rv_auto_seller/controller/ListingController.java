@@ -1,16 +1,20 @@
 package com.rv_auto_seller.controller;
 
+import com.rv_auto_seller.dto.request.ListingDTO;
 import com.rv_auto_seller.dto.response.ListingResponse;
 import com.rv_auto_seller.model.Listing;
 import com.rv_auto_seller.service.ListingService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/listing")
+@CrossOrigin(origins = "http://localhost:5173/")
 public class ListingController {
 
     private final ListingService listingService;
@@ -35,13 +39,12 @@ public class ListingController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/new_listing")
-    public ResponseEntity<ListingResponse> createListing(@RequestBody Listing listing) {
-        if (listing.getImages() != null) {
-            listing.getImages().forEach(image -> image.setListing(listing));
-        }
-        Listing savedListing = listingService.createListing(listing);
-        return ResponseEntity.ok(new ListingResponse(savedListing));
+    @PostMapping(value = "/new_listing",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ListingResponse> createListing(@ModelAttribute ListingDTO listingDto) throws IOException {
+
+            Listing savedListing = listingService.createListingFromDTO(listingDto);
+            ListingResponse response = new ListingResponse(savedListing);
+            return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")

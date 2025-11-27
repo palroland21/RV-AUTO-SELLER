@@ -36,23 +36,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updateUser(User user) {
+
+        User savedUser = findByUsername(user.getUsername());
+
+        System.out.println("Hello: " + savedUser);
+        // Changed
+        savedUser.setFirstName(user.getFirstName());
+        savedUser.setLastName(user.getLastName());
+        savedUser.setTelephone(user.getTelephone());
+
+        return userRepository.save(savedUser);
+    }
+
+    @Override
     public List<User> findAll(){
         return userRepository.findAll();
     }
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findAll().stream()
-                .filter(u -> u.getUsername().equals(username))
-                .findFirst()
+        return userRepository.findByUsername(username)
                 .orElse(null);
     }
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findAll().stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst()
+        return userRepository.findByEmail(email)
                 .orElse(null);
     }
 

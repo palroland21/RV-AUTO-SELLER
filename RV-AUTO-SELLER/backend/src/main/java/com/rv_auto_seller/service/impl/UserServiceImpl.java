@@ -1,5 +1,6 @@
 package com.rv_auto_seller.service.impl;
 
+import com.rv_auto_seller.dto.request.UpdatedUserRequest;
 import com.rv_auto_seller.model.User;
 import com.rv_auto_seller.repository.UserRepository;
 import com.rv_auto_seller.service.UserService;
@@ -36,15 +37,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
-
+    public User updateUser(UpdatedUserRequest user) {
         User savedUser = findByUsername(user.getUsername());
 
-        System.out.println("Hello: " + savedUser);
+        System.out.println("Hello: " + savedUser.getFirstName());
         // Changed
         savedUser.setFirstName(user.getFirstName());
         savedUser.setLastName(user.getLastName());
         savedUser.setTelephone(user.getTelephone());
+
+        System.out.println("Hello: " + savedUser.getFirstName());
 
         return userRepository.save(savedUser);
     }

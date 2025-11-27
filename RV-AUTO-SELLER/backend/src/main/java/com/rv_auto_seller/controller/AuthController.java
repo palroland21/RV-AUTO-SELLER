@@ -1,6 +1,7 @@
 package com.rv_auto_seller.controller;
 
 import com.rv_auto_seller.dto.request.LoginRequest;
+import com.rv_auto_seller.dto.request.UpdatedUserRequest;
 import com.rv_auto_seller.dto.response.LoginResponse;
 import com.rv_auto_seller.dto.response.RegisterResponse;
 import com.rv_auto_seller.dto.response.UserResponse;
@@ -124,21 +125,21 @@ public class AuthController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?>  updateUser(@RequestBody User user) {
-        System.out.println("DEBUG - Incoming username: '" + user.getUsername() + "'");
+    public ResponseEntity<?> updateUser(@RequestBody UpdatedUserRequest user) {
 
-        User savedUser = userService.findByUsername(user.getUsername());
-
-        if (savedUser == null) {
+        if (user == null) {
             throw new RuntimeException("User not found with username: " + user.getUsername());
         }
 
+        User updatedUser = userService.updateUser(user);
+
+
         RegisterResponse response = new RegisterResponse(
-                savedUser.getId(),
-                savedUser.getFirstName(),
-                savedUser.getLastName(),
-                savedUser.getUsername(),
-                savedUser.getEmail()
+                updatedUser.getId(),
+                updatedUser.getFirstName(),
+                updatedUser.getLastName(),
+                updatedUser.getUsername(),
+                updatedUser.getEmail()
         );
 
         System.out.println("User updated successful!");

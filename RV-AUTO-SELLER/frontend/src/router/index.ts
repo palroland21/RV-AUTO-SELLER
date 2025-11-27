@@ -32,11 +32,10 @@ const routes = [
         component: ListingForm
     },
     {
-        path:'/sell-form',
-        name: 'SellForm',
-        component: ListingForm
+        path: '/listings',
+        name: 'listings',
+        component: () => import('../views/HomeView.vue') // Temporar o trimitem tot la Home până faci pagina de Listings
     }
-
 ]
 
 const router = createRouter({

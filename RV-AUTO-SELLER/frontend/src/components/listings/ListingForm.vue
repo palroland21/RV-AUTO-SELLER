@@ -127,51 +127,54 @@
   <Footer />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
+import type { ListingFormData, ListingResponse } from '@/types/Listing';
 import ImageUploader from './ImageUploader.vue';
 import Navbar from "@/components/common/Navbar.vue";
 import Footer from "@/components/common/Footer.vue";
-// import axios from 'axios';
 
 const isSubmitting = ref(false);
-const listingImages = ref([]);
+const listingImages = ref<File[]>([]);
+const errorMessage = ref('');
+const successMessage = ref('');
 
-// data structure matches Listing.java
-const formData = reactive({
+const formData = reactive<ListingFormData>({
   title: '',
-  brand: '',            // Enum CarBrand
+  brand: '',
   model: '',
-  type: '',             // Enum CarType
-  yearOfManufacture: '',
-  horsePower: '',
-  price: '',
-  fuelType: '',         // Enum FuelType
-  transmissionType: '', // Enum TransmissionType
-  vin: '',              // VIN
+  type: '',
+  yearOfManufacture: null,
+  horsePower: null,
+  price: null,
+  fuelType: '',
+  transmissionType: '',
+  vin: '',
   location: '',
   description: ''
 });
 
 const enumOptions = reactive({
-  brands: [],
-  carTypes: [],
-  fuelTypes: [],
-  transmissionTypes: []
+  brands: [] as string[],
+  carTypes: [] as string[],
+  fuelTypes: [] as string[],
+  transmissionTypes: [] as string[]
 });
 
-
+// load enums from backend
 const loadEnums = async () => {
   try {
     const response = await fetch('http://localhost:9090/api/utils/enums');
-    const data = await response.json();
+    if (!response.ok) throw new Error("Failed to fetch enums");
 
+    const data = await response.json();
     enumOptions.brands = data.brands;
     enumOptions.carTypes = data.carTypes;
     enumOptions.fuelTypes = data.fuelTypes;
     enumOptions.transmissionTypes = data.transmissionTypes;
   } catch (error) {
     console.error("Can't load enums list from backend:", error);
+    errorMessage.value = "Failed to load form options. Please refresh.";
   }
 };
 
@@ -179,34 +182,88 @@ onMounted(() => {
   loadEnums();
 });
 
-const handleImagesUpdate = (files) => {
+const handleImagesUpdate = (files: File[]) => {
   listingImages.value = files;
 };
 
+function parseJwt (token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
+//trimitere catre backend
 const submitListing = async () => {
   isSubmitting.value = true;
+  errorMessage.value = 'Nu merge!!!!!!!';
+  successMessage.value = 'A mers, bravo!!';
 
   try {
     const submitData = new FormData();
-    Object.keys(formData).forEach(key => {
-      submitData.append(key, formData[key]);
+
+    // 1. Preluăm token-ul
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Trebuie să fii autentificat!");
+      return;
+    }
+
+    // 2. DECODĂM TOKEN-UL ȘI EXTRAGEM USERNAME-UL
+    const decodedToken = parseJwt(token);
+    // În JwtUtil-ul tău din backend ai pus .claim("username", ...), deci cheia e 'username' sau 'sub'
+    const usernameFromToken = decodedToken.username || decodedToken.sub;
+
+    console.log("Username extras din token:", usernameFromToken);
+
+    // 3. ÎL ADĂUGĂM MANUAL LA FORM DATA
+    submitData.append('username', usernameFromToken);
+
+    // 4. Adăugăm restul datelor din formular
+    (Object.keys(formData) as Array<keyof ListingFormData>).forEach(key => {
+      const value = formData[key];
+      if (value !== null && value !== undefined) {
+        submitData.append(key, value.toString());
+      }
     });
+
     listingImages.value.forEach(file => {
       submitData.append('images', file);
     });
 
-    console.log("Submitting to backend:");
-    for (var pair of submitData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]);
+    // 5. Trimitem cererea
+    const response = await fetch('http://localhost:9090/listing/new_listing', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: submitData
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Server responded with an error');
     }
 
-    alert('Listing published successfully! (Simulation)');
+    const responseData: ListingResponse = await response.json();
+    console.log("Listing Created:", responseData);
 
-  } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred while publishing the listing.');
+    successMessage.value = `Listing "${responseData.title}" published successfully!`;
+
+    //resetare formular/redirectionare
+    router.push(`/listings`);
+
+  } catch (error: any) {
+    console.error('Submission Error:', error);
+    errorMessage.value = error.message || 'An unexpected error occurred.';
   } finally {
     isSubmitting.value = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 };
 </script>

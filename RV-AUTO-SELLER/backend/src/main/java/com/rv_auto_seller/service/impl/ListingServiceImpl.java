@@ -7,6 +7,8 @@ import com.rv_auto_seller.model.User;
 import com.rv_auto_seller.repository.ListingRepository;
 import com.rv_auto_seller.repository.UserRepository;
 import com.rv_auto_seller.service.ListingService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,60 +50,60 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public Listing createListingFromDTO(ListingDTO listingDTO) throws IOException {
+    public Listing createListingFromDTO(ListingDTO dto) throws IOException {
+        System.out.println("Am ajuns in createListingDTO!!!!");
+        Listing listing = new Listing();
 
-            Listing listing = new Listing();
+        listing.setTitle(dto.getTitle());
+        listing.setBrand(dto.getBrand());
+        listing.setModel(dto.getModel());
+        listing.setType(dto.getType());
+        listing.setYearOfManufacture(dto.getYearOfManufacture());
+        listing.setHorsePower(dto.getHorsePower());
+        listing.setPrice(dto.getPrice());
+        listing.setFuelType(dto.getFuelType());
+        listing.setTransmissionType(dto.getTransmissionType());
+        listing.setVIN(dto.getVin());
+        listing.setLocation(dto.getLocation());
+        listing.setDescription(dto.getDescription());
 
-            listing.setTitle(listingDTO.getTitle());
-            listing.setBrand(listingDTO.getBrand());
-            listing.setModel(listingDTO.getModel());
-            listing.setType(listingDTO.getType());
-            listing.setYearOfManufacture(listingDTO.getYearOfManufacture());
-            listing.setHorsePower(listingDTO.getHorsePower());
-            listing.setPrice(listingDTO.getPrice());
-            listing.setFuelType(listingDTO.getFuelType());
-            listing.setTransmissionType(listingDTO.getTransmissionType());
-            listing.setVIN(listingDTO.getVin());
-            listing.setLocation(listingDTO.getLocation());
-            listing.setDescription(listingDTO.getDescription());
+        System.out.println("Username primit din Frontend: " + dto.getUsername()); // Debug
 
-            // 2. Setare User (Hardcodat ID 1 pentru testare, sau arunca eroare daca nu exista)
-            User user = userRepository.findById(1L)
-                    .orElseThrow(() -> new RuntimeException("Userul default (ID 1) nu a fost gasit in baza de date!"));
-            listing.setUser(user);
+        if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
+            throw new RuntimeException("Username-ul lipsește din cerere!");
+        }
 
-            // 3. Procesare Imagini
-            if (listingDTO.getImages() != null && !listingDTO.getImages().isEmpty()) {
-                List<Image> imageEntities = new ArrayList<>();
+        User currentUser = userRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new RuntimeException("Userul " + dto.getUsername() + " nu există în baza de date!"));
 
-                // Verificam daca folderul uploads exista
-                Path uploadPath = Paths.get(UPLOAD_DIR);
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
+        listing.setUser(currentUser);
 
-                for (MultipartFile file : listingDTO.getImages()) {
-                    if (!file.isEmpty()) {
-                        // Salvam fisierul fizic
-                        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                        Path filePath = uploadPath.resolve(fileName);
-                        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        // procesare imagini
+        if (dto.getImages() != null && !dto.getImages().isEmpty()) {
+            List<Image> imageEntities = new ArrayList<>();
 
-                        // Cream entitatea Image
-                        Image img = new Image();
-                        // Atentie: URL-ul trebuie sa fie accesibil din browser.
-                        // Va trebui sa configurezi un ResourceHandler pentru "/uploads/**"
-                        img.setUrl("/uploads/" + fileName);
-                        img.setListing(listing);
-
-                        imageEntities.add(img);
-                    }
-                }
-                listing.setImages(imageEntities);
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
             }
 
-            return listingRepository.save(listing);
+            for (MultipartFile file : dto.getImages()) {
+                if (!file.isEmpty()) {
+                    String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                    Path filePath = uploadPath.resolve(fileName);
+                    Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                    Image img = new Image();
+                    img.setUrl("/uploads/" + fileName);
+                    img.setListing(listing);
+                    imageEntities.add(img);
+                }
+            }
+            listing.setImages(imageEntities);
         }
+
+        return listingRepository.save(listing);
+    }
 
 @Override
 public Listing updateListing(Long id, Listing updatedListing) {

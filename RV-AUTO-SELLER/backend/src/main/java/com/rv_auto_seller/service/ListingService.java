@@ -11,7 +11,7 @@ public interface ListingService {
     List<Listing> getAllListings();
     Optional<Listing> getListingById(Long id);
     Listing createListing(Listing listing);
-    Listing createListingFromDTO(ListingDTO listingDTO) throws IOException;
+    Listing createListingFromDTO(ListingDTO dto) throws IOException;
     Listing updateListing(Long id, Listing updatedListing);
     void deleteListing(Long id);
 

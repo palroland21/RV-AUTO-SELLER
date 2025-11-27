@@ -22,6 +22,15 @@ public class ListingDTO {
     private String vin;
     private String location;
     private String description;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     private List<MultipartFile> images;
 

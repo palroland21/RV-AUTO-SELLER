@@ -92,7 +92,7 @@ public class Listing {
     @Column(name = "Location", nullable = false, length = 50)
     private String location;
 
-    @Column(name = "VIN", nullable = true, unique = true, length = 17)
+    @Column(name = "VIN", length = 17)
     private String VIN;
 
     @Enumerated(EnumType.STRING)

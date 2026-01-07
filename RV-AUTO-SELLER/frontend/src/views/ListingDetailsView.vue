@@ -126,11 +126,8 @@
               <button class="btn-primary full-width" @click="openAppointmentModal">
                 <span class="btn-icon">📅</span> Schedule Test Drive
               </button>
-              <button class="btn-outline full-width">
-                <span class="btn-icon">💬</span> Send Message
-              </button>
-              <button class="btn-text full-width">
-                <span class="btn-icon">📞</span> Show Phone Number
+              <button class="btn-outline full-width" @click="openFeedbackModal">
+                <span class="btn-icon">⭐</span> Rate Seller
               </button>
             </div>
 
@@ -171,6 +168,49 @@
             <button type="button" class="btn-secondary" @click="closeModal">Cancel</button>
             <button type="submit" class="btn-primary" :disabled="isSubmittingAppt">
               {{ isSubmittingAppt ? 'Sending...' : 'Confirm Appointment' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div v-if="showFeedbackModalState" class="modal-overlay" @click.self="closeFeedbackModal">
+      <div class="modal-content">
+        <h2>Rate the Seller</h2>
+        <p class="modal-subtitle">How was your experience with {{ listing.username }}?</p>
+
+        <form @submit.prevent="submitFeedback">
+
+          <div class="form-group">
+            <label>Rating *</label>
+            <div class="star-input">
+          <span
+              v-for="star in 5"
+              :key="star"
+              @click="feedbackForm.rating = star"
+              :class="{ active: star <= feedbackForm.rating }"
+          >★</span>
+            </div>
+            <p class="rating-text">You selected: {{ feedbackForm.rating }} stars</p>
+          </div>
+
+          <div class="form-group">
+            <label>Your Review</label>
+            <textarea
+                v-model="feedbackForm.description"
+                placeholder="Describe your interaction (e.g., punctual, honest, friendly)..."
+                rows="4"
+                required
+            ></textarea>
+          </div>
+
+          <div v-if="feedbackError" class="error-text">{{ feedbackError }}</div>
+          <div v-if="feedbackSuccess" class="success-text">{{ feedbackSuccess }}</div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" @click="closeFeedbackModal">Cancel</button>
+            <button type="submit" class="btn-primary" :disabled="isSubmittingFeedback">
+              {{ isSubmittingFeedback ? 'Posting...' : 'Submit Review' }}
             </button>
           </div>
         </form>
@@ -297,6 +337,75 @@ const submitAppointment = async () => {
 onMounted(() => {
   fetchListingDetails();
 });
+
+// --- FEEDBACK LOGIC ---
+const showFeedbackModalState = ref(false);
+const isSubmittingFeedback = ref(false);
+const feedbackError = ref('');
+const feedbackSuccess = ref('');
+
+const feedbackForm = reactive({
+  rating: 5, // Default 5 stele
+  description: ''
+});
+
+const openFeedbackModal = () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    if(confirm("You need to login to leave a review. Go to login?")) {
+      router.push({ path: '/login', query: { redirect: route.fullPath } });
+    }
+    return;
+  }
+  // Reset form
+  feedbackForm.rating = 5;
+  feedbackForm.description = '';
+  feedbackError.value = '';
+  feedbackSuccess.value = '';
+  showFeedbackModalState.value = true;
+};
+
+const closeFeedbackModal = () => {
+  showFeedbackModalState.value = false;
+};
+
+const submitFeedback = async () => {
+  isSubmittingFeedback.value = true;
+  feedbackError.value = '';
+  feedbackSuccess.value = '';
+
+  try {
+    const token = localStorage.getItem('token');
+
+    // Luam ID-ul vanzatorului (am facut logica asta deja pt appointment)
+    const sellerIdValue = listing.value.userId || listing.value.user || listing.value.userID;
+
+    if (!sellerIdValue) throw new Error("Seller ID not found.");
+
+    const payload = {
+      toUserId: sellerIdValue,
+      rating: feedbackForm.rating,
+      description: feedbackForm.description
+    };
+
+    await axios.post('http://localhost:9090/feedback/add', payload, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    feedbackSuccess.value = "Review posted successfully!";
+
+    setTimeout(() => {
+      closeFeedbackModal();
+    }, 1500);
+
+  } catch (error) {
+    console.error(error);
+    // Verificăm dacă eroarea e cea cu "You cannot review yourself"
+    feedbackError.value = error.response?.data || "Failed to post review.";
+  } finally {
+    isSubmittingFeedback.value = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -322,6 +431,31 @@ onMounted(() => {
 .badge.year { background: #e0f2fe; color: #0369a1; }
 .badge.condition { background: #dcfce7; color: #15803d; }
 .location-tag { color: #6b7280; display: flex; align-items: center; gap: 0.3rem; font-weight: 500; }
+
+/* STAR INPUT STYLES */
+.star-input {
+  display: flex;
+  gap: 5px;
+  font-size: 2rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.star-input span {
+  color: #d1d5db; /* Gri default */
+  transition: color 0.2s;
+}
+
+.star-input span:hover,
+.star-input span.active {
+  color: #fbbf24; /* Galben la hover sau selectat */
+}
+
+.rating-text {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: -5px;
+}
 
 .price-tag {
   font-size: 2.2rem;

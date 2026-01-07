@@ -34,6 +34,9 @@
         <button :class="{ active: tab==='appointments' }" @click="fetchMyAppointments(); tab='appointments'">
           <span class="icon">📅</span> Appointments
         </button>
+        <button :class="{ active: tab==='reviews' }" @click="fetchMyReviews(); tab='reviews'">
+          <span class="icon">⭐</span> Reviews
+        </button>
       </div>
 
       <div v-if="successMessage" class="alert success">{{ successMessage }}</div>
@@ -138,6 +141,29 @@
         </div>
       </div>
 
+      <div v-if="tab === 'reviews'" class="tab-content fade-in">
+        <h3>My Reputation</h3>
+
+        <div v-if="isLoadingReviews" class="spinner-container"><div class="spinner"></div></div>
+
+        <div v-else-if="myReviews.length === 0" class="empty-state">
+          <p>No reviews received yet.</p>
+        </div>
+
+        <div v-else class="reviews-list">
+          <div v-for="review in myReviews" :key="review.id" class="review-card">
+            <div class="review-header">
+              <span class="reviewer-name">{{ review.fromUserName }}</span>
+              <span class="review-date">{{ new Date(review.createdAt).toLocaleDateString() }}</span>
+            </div>
+            <div class="star-rating">
+              <span v-for="n in 5" :key="n" :class="{ filled: n <= review.rating }">★</span>
+            </div>
+            <p class="review-text">{{ review.description }}</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
   <Footer />
@@ -152,6 +178,7 @@ import { getCurrentUser, updateUser } from "@/api/userService";
 import type { User } from "@/types/User";
 import axios from "axios";
 
+// --- INTERFACES ---
 interface Listing {
   id: number;
   title: string;
@@ -168,27 +195,38 @@ interface Appointment {
   details?: string;
 }
 
-// State
+interface Review {
+  id: number;
+  fromUserName: string;
+  rating: number;
+  description: string;
+  createdAt: string;
+}
+
+// --- STATE ---
 const router = useRouter();
 const user = ref<User | null>(null);
 const isLoggedIn = ref<boolean>(false);
-const tab = ref<"profile" | "ads" | "appointments">("profile");
+const tab = ref<"profile" | "ads" | "appointments" | "reviews">("profile");
 
-// Feedback State
+// Feedback UI State
 const isLoading = ref(false);
 const successMessage = ref("");
 const errorMessage = ref("");
 
-
+// Data State
 const myListings = ref<Listing[]>([]);
 const isLoadingListings = ref(false);
 
 const myAppointments = ref<Appointment[]>([]);
 const isLoadingAppts = ref(false);
 
+const myReviews = ref<Review[]>([]);
+const isLoadingReviews = ref(false);
+
 const BASE_UPLOAD_URL = 'http://localhost:9090/uploads/';
 
-
+// --- HELPER FUNCTIONS ---
 const getCleanImageUrl = (imgObj: any) => {
   if (!imgObj) return 'https://placehold.co/150x100?text=No+Img';
   let rawUrl = imgObj.url || imgObj;
@@ -205,7 +243,9 @@ const showSuccess = (msg: string) => {
   setTimeout(() => successMessage.value = "", 3000);
 };
 
+// --- API ACTIONS ---
 
+// 1. Update Profile
 const updateChanges = async () => {
   if (!user.value) return;
   isLoading.value = true;
@@ -223,7 +263,7 @@ const updateChanges = async () => {
   }
 };
 
-
+// 2. Fetch Listings
 const fetchMyListings = async () => {
   isLoadingListings.value = true;
   try {
@@ -249,13 +289,13 @@ const deleteListing = async (id: number) => {
       headers: { Authorization: `Bearer ${token}` }
     });
     showSuccess("Listing deleted.");
-    // Remove from list locally
     myListings.value = myListings.value.filter((item) => item.id !== id);
   } catch (error) {
     errorMessage.value = "Could not delete listing.";
   }
 };
 
+// 4. Fetch Appointments
 const fetchMyAppointments = async () => {
   isLoadingAppts.value = true;
   try {
@@ -268,6 +308,22 @@ const fetchMyAppointments = async () => {
     console.error("Error loading appointments", error);
   } finally {
     isLoadingAppts.value = false;
+  }
+};
+
+// 5. Fetch Reviews
+const fetchMyReviews = async () => {
+  isLoadingReviews.value = true;
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:9090/feedback/my-reviews', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    myReviews.value = response.data;
+  } catch (error) {
+    console.error("Error loading reviews", error);
+  } finally {
+    isLoadingReviews.value = false;
   }
 };
 
@@ -313,8 +369,8 @@ onMounted(async () => {
 .email-text { color: #6b7280; margin-top: 0.3rem; }
 
 /* TABS */
-.tabs { display: flex; gap: 0.8rem; background: #f3f4f6; padding: 6px; border-radius: 10px; margin-bottom: 2rem; }
-.tabs button { flex: 1; padding: 12px; border-radius: 8px; border: none; background: transparent; cursor: pointer; font-weight: 600; color: #6b7280; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+.tabs { display: flex; gap: 0.8rem; background: #f3f4f6; padding: 6px; border-radius: 10px; margin-bottom: 2rem; overflow-x: auto; }
+.tabs button { flex: 1; padding: 12px; border-radius: 8px; border: none; background: transparent; cursor: pointer; font-weight: 600; color: #6b7280; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; white-space: nowrap; }
 .tabs button:hover { background: rgba(255,255,255,0.5); }
 .tabs .active { background: white; color: #1a4a9c; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
@@ -340,7 +396,7 @@ input { padding: 12px; border-radius: 8px; border: 1px solid #d1d5db; background
 .listings-list { display: flex; flex-direction: column; gap: 1rem; }
 .listing-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #e5e7eb; border-radius: 10px; transition: transform 0.2s; background: white; }
 .listing-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-.listing-img { width: 80px; height: 60px; border-radius: 6px; overflow: hidden; background: #eee; }
+.listing-img { width: 80px; height: 60px; border-radius: 6px; overflow: hidden; background: #eee; flex-shrink: 0; }
 .listing-img img { width: 100%; height: 100%; object-fit: cover; }
 .listing-info { flex: 1; }
 .listing-info h4 { margin: 0 0 0.3rem 0; font-size: 1rem; color: #111827; }
@@ -362,6 +418,31 @@ input { padding: 12px; border-radius: 8px; border: 1px solid #d1d5db; background
 .note { font-style: italic; color: #6b7280; font-size: 0.9rem; }
 .appt-status { margin: 1rem; align-self: center; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
 .badge-pending { background: #fef3c7; color: #b45309; }
+
+/* REVIEWS TAB (STILURI NOI) */
+.reviews-list { display: flex; flex-direction: column; gap: 1rem; }
+.review-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+.reviewer-name { font-weight: 700; color: #1a4a9c; }
+.review-date { color: #9ca3af; font-size: 0.8rem; }
+.star-rating {
+  color: #e5e7eb;
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+.star-rating .filled { color: #fbbf24; }
+.review-text { color: #4b5563; line-height: 1.5; font-style: italic; }
 
 /* COMMON */
 .empty-state { text-align: center; padding: 3rem; color: #6b7280; }

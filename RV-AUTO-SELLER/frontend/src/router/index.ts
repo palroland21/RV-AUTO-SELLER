@@ -5,6 +5,9 @@ import LoginView from "@/views/Auth/LoginView.vue";
 import RegisterView from "@/views/Auth/RegisterView.vue";
 import ListingForm from "@/components/listings/ListingForm.vue";
 import ListingDetailsView from "@/views/ListingDetailsView.vue";
+import ContactView from '../views/ContactView.vue'
+import FaqView from '../views/FaqView.vue'
+import PrivacyPolicyView from '../views/PrivacyPolicyView.vue'
 
 const routes = [
     {
@@ -47,6 +50,21 @@ const routes = [
         path: '/my-appointments',
         name: 'myAppointments',
         component: Account,
+    },
+    {
+        path:'/contact',
+        name: 'contact',
+        component: ContactView
+    },
+    {
+        path: '/faq',
+        name: 'faq',
+        component: FaqView
+    },
+    {
+        path: '/privacy',
+        name: 'privacy',
+        component: PrivacyPolicyView
     }
 ]
 

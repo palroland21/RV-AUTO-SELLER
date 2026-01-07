@@ -22,9 +22,15 @@
       <div class="footer-column links">
         <h4>Support</h4>
         <ul>
-          <li><a href="/contact">Contact</a></li>
-          <li><a href="/faq">FAQ</a></li>
-          <li><a href="/politics">Privacy policy</a></li>
+          <li>
+            <router-link to="/contact">Contact</router-link>
+          </li>
+          <li>
+            <router-link to="/faq">FAQ</router-link>
+          </li>
+          <li>
+            <router-link to="/privacy">Privacy Policy</router-link>
+          </li>
         </ul>
       </div>
 

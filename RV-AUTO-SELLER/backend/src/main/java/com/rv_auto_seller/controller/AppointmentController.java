@@ -1,9 +1,12 @@
 package com.rv_auto_seller.controller;
 
+import com.rv_auto_seller.dto.request.AppointmentRequest;
 import com.rv_auto_seller.dto.response.AppointmentResponse;
 import com.rv_auto_seller.model.Appointment;
 import com.rv_auto_seller.service.AppointmentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,10 +38,22 @@ public class AppointmentController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/new_appointment")
-    public ResponseEntity<AppointmentResponse> createAppointment(@RequestBody Appointment appointment) {
-        Appointment saved = appointmentService.createAppointment(appointment);
-        return ResponseEntity.ok(new AppointmentResponse(saved));
+    @PostMapping("/create")
+    public ResponseEntity<?> createAppointment(@RequestBody AppointmentRequest request) {
+        try {
+            // Luăm utilizatorul logat din Token
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentClientUsername = authentication.getName();
+
+            // Apelăm metoda nouă care se ocupă de transformarea DTO -> Entity
+            AppointmentResponse response = appointmentService.scheduleAppointment(request, currentClientUsername);
+
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error scheduling appointment: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

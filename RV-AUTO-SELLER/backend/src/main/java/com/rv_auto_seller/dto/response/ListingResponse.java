@@ -27,7 +27,7 @@ public class ListingResponse {
     private String VIN;
     private TransmissionType transmissionType;
     private String description;
-    private Long user;
+    private Long userId;
 
     public ListingResponse(Listing listing) {
         this.id = listing.getId();
@@ -43,7 +43,7 @@ public class ListingResponse {
         this.location = listing.getLocation();
         this.VIN = listing.getVIN();
         this.description = listing.getDescription();
-        this.user = listing.getUser().getId();
+        this.userId = listing.getUser().getId();
     }
 
     // Getteri
@@ -99,8 +99,8 @@ public class ListingResponse {
         return description;
     }
 
-    public Long getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
     public TransmissionType getTransmissionType() {

@@ -28,12 +28,14 @@
         </div>
       </div>
 
-      <button class="btn-details">See details</button>
+      <button class="btn-details" @click="goToDetails">See details</button>
     </div>
   </div>
 </template>
 
 <script setup>
+import {useRouter} from "vue-router";
+const router = useRouter();
 const props = defineProps({
   id: Number,
   image: String,
@@ -45,6 +47,10 @@ const props = defineProps({
   location: String,
   isRecommended: Boolean
 });
+
+const goToDetails = () => {
+  router.push(`/listing/${props.id}`);
+};
 
 const BASE_UPLOAD_URL = 'http://localhost:9090/uploads/';
 

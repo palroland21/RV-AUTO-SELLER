@@ -4,6 +4,7 @@ import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/Auth/LoginView.vue";
 import RegisterView from "@/views/Auth/RegisterView.vue";
 import ListingForm from "@/components/listings/ListingForm.vue";
+import ListingDetailsView from "@/views/ListingDetailsView.vue";
 
 const routes = [
     {
@@ -35,6 +36,12 @@ const routes = [
         path: '/listings',
         name: 'listings',
         component: () => import('../views/VehiclesView.vue')
+    },
+    {
+        path: '/listing/:id',
+        name: 'listing-details',
+        component: ListingDetailsView,
+        props: true
     }
 ]
 

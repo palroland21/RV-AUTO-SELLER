@@ -20,6 +20,7 @@ public class SecurityConfig {
                         .requestMatchers("/appointment/**").permitAll()
                         .requestMatchers("/feedback/**").permitAll()
                         .requestMatchers("/api/utils/**").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

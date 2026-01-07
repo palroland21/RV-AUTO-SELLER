@@ -27,7 +27,7 @@ public class ListingServiceImpl implements ListingService {
 
    private final ListingRepository listingRepository;
    private final UserRepository userRepository;
-   private final String UPLOAD_DIR = "/uploads";
+   private final String UPLOAD_DIR = "uploads";
 
     public ListingServiceImpl(ListingRepository listingRepository, UserRepository userRepository) {
         this.listingRepository = listingRepository;

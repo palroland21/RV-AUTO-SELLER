@@ -29,12 +29,13 @@ import Navbar from "@/components/common/Navbar.vue";
 import Footer from "@/components/common/Footer.vue";
 import {ref} from "vue";
 import axios from "axios";
-import {useRouter} from "vue-router";
+import {useRouter, useRoute} from "vue-router";
 
 const username = ref("");
 const password = ref("");
 const errorMessage = ref("");
 const router = useRouter();
+const route = useRoute();
 
 const handleLogin = async () => {
   try{
@@ -50,11 +51,12 @@ const handleLogin = async () => {
     }
 
     localStorage.setItem("token", token);
+    console.log("Redirecting to:", route.query.redirect);
 
-    router.push("/account");
+    const destination = route.query.redirect ? route.query.redirect : '/account';
 
-    // redirectare
-    // router.push("/dashboard");
+    router.push(destination);
+
   } catch (error) {
      errorMessage.value = "Username or password is incorrect!";
      console.log(error);

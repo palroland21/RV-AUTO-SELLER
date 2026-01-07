@@ -1,10 +1,13 @@
 package com.rv_auto_seller.controller;
 
+import com.rv_auto_seller.dto.request.FeedbackRequest;
 import com.rv_auto_seller.dto.response.AppointmentResponse;
 import com.rv_auto_seller.dto.response.FeedbackResponse;
 import com.rv_auto_seller.model.Feedback;
 import com.rv_auto_seller.service.FeedbackService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,6 +80,30 @@ public class FeedbackController {
                     return ResponseEntity.ok(new FeedbackResponse(feedback));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addFeedback(@RequestBody FeedbackRequest request) {
+        try {
+            // Aflăm cine face cererea (cel care lasă recenzia)
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String fromUsername = auth.getName();
+
+            FeedbackResponse response = feedbackService.addFeedback(request, fromUsername);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/my-reviews")
+    public ResponseEntity<List<FeedbackResponse>> getMyReviews() {
+        // Aflăm cine face cererea
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = auth.getName();
+
+        List<FeedbackResponse> reviews = feedbackService.getMyReceivedFeedback(currentUsername);
+        return ResponseEntity.ok(reviews);
     }
 
 }

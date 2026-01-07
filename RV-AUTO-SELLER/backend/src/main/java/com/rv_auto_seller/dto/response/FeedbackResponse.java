@@ -13,6 +13,7 @@ public class FeedbackResponse {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String fromUserName;
 
     public FeedbackResponse(Feedback feedback) {
         this.id = feedback.getId();
@@ -22,6 +23,7 @@ public class FeedbackResponse {
         this.description = feedback.getDescription();
         this.createdAt = feedback.getCreatedAt();
         this.updatedAt = feedback.getUpdatedAt();
+        this.fromUserName = feedback.getFromUser().getUsername() + " " + feedback.getFromUser().getLastName();;
     }
 
     public Long getFromUser() {
@@ -70,5 +72,21 @@ public class FeedbackResponse {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFromUserName() {
+        return fromUserName;
+    }
+
+    public void setFromUserName(String fromUserName) {
+        this.fromUserName = fromUserName;
     }
 }

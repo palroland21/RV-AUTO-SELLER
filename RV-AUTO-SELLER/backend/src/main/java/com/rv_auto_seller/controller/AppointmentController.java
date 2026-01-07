@@ -3,6 +3,7 @@ package com.rv_auto_seller.controller;
 import com.rv_auto_seller.dto.request.AppointmentRequest;
 import com.rv_auto_seller.dto.response.AppointmentResponse;
 import com.rv_auto_seller.model.Appointment;
+import com.rv_auto_seller.model.User;
 import com.rv_auto_seller.service.AppointmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -68,4 +69,14 @@ public class AppointmentController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @GetMapping("/my-appointments")
+    public ResponseEntity<List<AppointmentResponse>> getMyAppointments() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = auth.getName();
+
+        List<AppointmentResponse> list = appointmentService.getAppointmentsForUser(currentUsername);
+
+        return ResponseEntity.ok(list);
+    }
 }

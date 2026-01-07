@@ -9,8 +9,10 @@ import com.rv_auto_seller.repository.UserRepository;
 import com.rv_auto_seller.service.AppointmentService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -82,5 +84,25 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment savedAppointment = this.createAppointment(appointment);
 
         return new AppointmentResponse(savedAppointment);
+    }
+
+    @Override
+    public List<AppointmentResponse> getAppointmentsForUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Appointment> asClient = appointmentRepository.findByClientId(user.getId());
+
+        List<Appointment> asSeller = appointmentRepository.findBySellerId(user.getId());
+
+        List<Appointment> allAppointments = new ArrayList<>();
+        allAppointments.addAll(asClient);
+        allAppointments.addAll(asSeller);
+
+        allAppointments.sort((a, b) -> b.getDate().compareTo(a.getDate()));
+
+        return allAppointments.stream()
+                .map(AppointmentResponse::new)
+                .collect(Collectors.toList());
     }
 }

@@ -14,4 +14,6 @@ public interface AppointmentService {
     Appointment updateAppointment(Long id,Appointment appointment);
     void deleteAppointment(Long id);
     AppointmentResponse scheduleAppointment(AppointmentRequest request, String clientUsername);
+    List<AppointmentResponse> getAppointmentsForUser(String username);
 }
+

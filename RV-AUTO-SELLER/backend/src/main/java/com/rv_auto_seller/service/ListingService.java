@@ -14,5 +14,6 @@ public interface ListingService {
     Listing createListingFromDTO(ListingDTO dto) throws IOException;
     Listing updateListing(Long id, Listing updatedListing);
     void deleteListing(Long id);
-
+    void deleteListing(Long id, String username);
+    List<Listing> getListingsByUser(String username);
 }

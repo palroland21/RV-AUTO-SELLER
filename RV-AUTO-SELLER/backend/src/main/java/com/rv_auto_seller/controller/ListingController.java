@@ -6,6 +6,8 @@ import com.rv_auto_seller.model.Listing;
 import com.rv_auto_seller.service.ListingService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -54,8 +56,25 @@ public class ListingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteListing(@PathVariable("id") Long id) {
-        listingService.deleteListing(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteListing(@PathVariable Long id) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = auth.getName();
+
+            listingService.deleteListing(id, username);
+
+            return ResponseEntity.ok("Listing deleted successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(403).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/my-listings")
+    public ResponseEntity<?> getMyListings() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        List<Listing> listings = listingService.getListingsByUser(username);
+        return ResponseEntity.ok(listings);
     }
 }

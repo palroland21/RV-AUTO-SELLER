@@ -140,8 +140,32 @@ public Listing updateListing(Long id, Listing updatedListing) {
     return listingRepository.save(existing);
 }
 
+    @Override
+    public void deleteListing(Long id, String username) {
+        Listing listing = listingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Listing not found"));
+
+        if (!listing.getUser().getUsername().equals(username)) {
+            throw new RuntimeException("Unauthorized: You can only delete your own listings!");
+        }
+        listingRepository.delete(listing);
+    }
+
+    @Override
+    public void deleteListing(Long id) {
+        listingRepository.deleteById(id);
+    }
+
 @Override
-public void deleteListing(Long id) {
-    listingRepository.deleteById(id);
+public List<Listing> getListingsByUser(String username) {
+
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found: " + username));
+
+    return listingRepository.findAllByUser(user);
+    }
+
+
 }
-}
+
+

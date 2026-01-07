@@ -42,6 +42,11 @@ const routes = [
         name: 'listing-details',
         component: ListingDetailsView,
         props: true
+    },
+    {
+        path: '/my-appointments',
+        name: 'myAppointments',
+        component: Account,
     }
 ]
 

@@ -35,4 +35,6 @@ export interface ListingResponse {
     transmissionType: string;
     description: string;
     user: number;
+
+    sold?: boolean;
 }

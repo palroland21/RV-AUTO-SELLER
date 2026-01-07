@@ -126,6 +126,7 @@ public Listing updateListing(Long id, Listing updatedListing) {
     existing.setHorsePower(updatedListing.getHorsePower());
     existing.setLocation(updatedListing.getLocation());
     existing.setVIN(updatedListing.getVIN());
+    existing.setSold(updatedListing.isSold());
     existing.setTransmissionType(updatedListing.getTransmissionType());
     existing.setDescription(updatedListing.getDescription());
 

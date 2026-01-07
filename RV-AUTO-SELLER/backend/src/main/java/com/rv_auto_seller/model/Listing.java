@@ -95,6 +95,9 @@ public class Listing {
     @Column(name = "VIN", length = 17)
     private String VIN;
 
+    @Column(name = "SOLD", nullable = false)
+    private boolean sold = false;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "TRANSMISSION_TYPE", nullable = true)
     private TransmissionType transmissionType;
@@ -224,5 +227,13 @@ public class Listing {
 
     public void setTransmissionType(TransmissionType transmissionType) {
         this.transmissionType = transmissionType;
+    }
+
+    public boolean isSold() {
+        return sold;
+    }
+
+    public void setSold(boolean sold) {
+        this.sold = sold;
     }
 }

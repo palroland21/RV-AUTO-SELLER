@@ -444,6 +444,48 @@ input { padding: 12px; border-radius: 8px; border: 1px solid #d1d5db; background
 .star-rating .filled { color: #fbbf24; }
 .review-text { color: #4b5563; line-height: 1.5; font-style: italic; }
 
+/* AUTH REQUIRED BUTTONS (pentru Login + Register ca pe sell-form) */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn.primary {
+  background: #1a4a9c;
+  color: white;
+  border-color: #1a4a9c;
+}
+
+.btn.primary:hover {
+  background: #153e85;
+  border-color: #153e85;
+}
+
+.btn.secondary {
+  background: white;
+  color: #1a4a9c;
+}
+
+.btn.secondary:hover {
+  background: #f3f4f6;
+}
+
+
 /* COMMON */
 .empty-state { text-align: center; padding: 3rem; color: #6b7280; }
 .fade-in { animation: fadeIn 0.3s ease-out; }

@@ -34,7 +34,7 @@ const routes = [
     {
         path: '/listings',
         name: 'listings',
-        component: () => import('../views/HomeView.vue') // Temporar o trimitem tot la Home până faci pagina de Listings
+        component: () => import('../views/VehiclesView.vue')
     }
 ]
 

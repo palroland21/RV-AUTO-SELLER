@@ -2,7 +2,7 @@
   <div class="car-card">
     <div class="card-image-wrapper">
       <div v-if="isRecommended" class="badge-recommended">Recommended</div>
-      <img :src="image" :alt="title" class="car-image" />
+      <img :src="image" :alt="title" class="car-image" @error="handleImageError" />
     </div>
 
     <div class="card-content">
@@ -34,7 +34,8 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
+  id: Number,
   image: String,
   title: String,
   price: Number,
@@ -44,6 +45,24 @@ defineProps({
   location: String,
   isRecommended: Boolean
 });
+
+const BASE_UPLOAD_URL = 'http://localhost:9090/uploads/';
+
+const fallbackImages = [
+  'generic-1.jpeg',
+  'generic-2.jpg',
+  'generic-3.jpg',
+  'generic-4.jpg'
+];
+
+const handleImageError = (e) => {
+  if (props.id && fallbackImages.length > 0) {
+    const index = props.id % fallbackImages.length;
+    e.target.src = BASE_UPLOAD_URL + fallbackImages[index];
+  } else {
+    e.target.src = 'https://placehold.co/600x400?text=No+Image+Available';
+  }
+};
 </script>
 
 <style scoped>

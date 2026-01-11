@@ -64,17 +64,26 @@
         <p>Discover the best deals verified by our team</p>
       </div>
 
-      <div class="listings-grid">
+      <div v-if="isLoading" style="text-align: center; padding: 2rem;">
+        <p>Finding best deals...</p>
+      </div>
+
+      <div v-else-if="recommendedListings.length === 0" style="text-align: center;">
+        <p>No listings found.</p>
+      </div>
+
+      <div v-else class="listings-grid">
         <CarCard
-            v-for="n in 4"
-            :key="n"
-            title=""
-            :price="15000"
-            :year="2023"
-            :km="10000"
-            fuel="Petrol"
-            location="Bucharest"
-            image=""
+            v-for="car in recommendedListings"
+            :key="car.id"
+            :id="car.id"
+            :title="car.title"
+            :price="car.price"
+            :year="car.yearOfManufacture"
+            :km="0"
+            :fuel="car.fuelType"
+            :location="car.location"
+            :image="getCleanImageUrl(car.listingImages?.[0] || car.images?.[0])"
             :isRecommended="true"
         />
       </div>
@@ -85,10 +94,49 @@
 </template>
 
 <script setup>
-import Navbar from "@/components/common/Navbar.vue";
-import Footer from "@/components/common/Footer.vue";
-import CarCard from "@/components/common/CarCard.vue";
+
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios'; // Asigură-te că ai axios instalat
+  import Navbar from "@/components/common/Navbar.vue";
+  import Footer from "@/components/common/Footer.vue";
+  import CarCard from "@/components/common/CarCard.vue";
+
+  const recommendedListings = ref([]);
+  const isLoading = ref(true);
+
+  const BASE_UPLOAD_URL = 'http://localhost:9090/uploads/';
+
+  const getCleanImageUrl = (imgObj) => {
+  if (!imgObj) return 'https://placehold.co/600x400?text=No+Image';
+
+  let rawUrl = imgObj.url || imgObj;
+
+  if (typeof rawUrl === 'string') {
+  if (rawUrl.includes('uploads')) rawUrl = rawUrl.split(/uploads[\\/]/).pop();
+  if (rawUrl.startsWith('/') || rawUrl.startsWith('\\')) rawUrl = rawUrl.substring(1);
+  return `${BASE_UPLOAD_URL}${rawUrl}`;
+}
+  return 'https://placehold.co/600x400?text=Error';
+};
+
+  onMounted(async () => {
+  try {
+  const response = await axios.get('http://localhost:9090/listing/listings');
+
+  const allListings = response.data;
+
+  const shuffled = allListings.sort(() => 0.5 - Math.random());
+
+  recommendedListings.value = shuffled.slice(0, 4);
+
+} catch (error) {
+  console.error("Error fetching listings:", error);
+} finally {
+  isLoading.value = false;
+}
+});
 </script>
+
 
 <style>
 .hero-section {
